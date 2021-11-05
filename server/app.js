@@ -13,7 +13,7 @@ const handle = app.getRequestHandler();
 
 const attractionControllers = require("./controllers/attractionControllers");
 
-const errorHandler = require("./middleware/errorHandler");
+//  errorHandler = require("./middleware/errorHandler");
 
 app.prepare().then(() => {
   const server = new Koa();
@@ -41,11 +41,21 @@ app.prepare().then(() => {
     // } else {
     //   await app.render(ctx.req, ctx.res, "/", ctx.query);
     // }
+    ctx.response.body="ok"
     // ctx.respond = false;
   });
 
-  // orderlist
-  router.post("/api/getAttractionsList", attractionControllers.getList);
+  router.get("/attractions", async (ctx) => {
+    ctx.status = 200;
+    await app.render(ctx.req, ctx.res, "/attractions", ctx.query);
+    ctx.respond = false;
+  });
+
+  // 景點列表
+  router.get("/api/getAttractionsList", attractionControllers.getList);
+  router.get("/api/getRestaurantList", attractionControllers.getList);
+  router.get("/api/getHotelList", attractionControllers.getList);
+  router.get("/api/getActivityList", attractionControllers.getList);
 
   //for post data (ctx.request.body)
   server.use(
@@ -57,7 +67,7 @@ app.prepare().then(() => {
     })
   );
   // errorHandler
-  server.use(errorHandler());
+  // server.use(errorHandler());
   // routes
   server.use(router.routes());
 
@@ -77,10 +87,11 @@ app.prepare().then(() => {
     console.error(`exit code: ${code}`);
   });
 
-  router.get("*", async (ctx) => {
-    await handle(ctx.req, ctx.res);
-    ctx.respond = false;
-  });
+  router.get('(.*)', async ctx => {
+    await handle(ctx.req, ctx.res)
+    ctx.respond = false
+  })
+  // router.get('(.*)', (ctx) => { ctx.body = 'ok' })
 
   // listen
   server.listen(config.port, () => {

@@ -9,30 +9,79 @@ const uri = {
   activity: `${apiBaseUri}Tourism/Activity`,
 };
 
-exports.getList = async (ctx, next) => {
+exports.getScenicSpotList = async (ctx, next) => {
   ctx.status = 200;
-  // const { compNo, no, startDate, endDate, orderNo, method, status } = ctx.request.body
+  // const { compNo, no, startDate, } = ctx.request.body
   const options = {
-    method: "POST",
-    url: "",
-    data: {},
+    method: "GET",
+    url: uri.scenicSpot,
+    // data: {},
   };
   try {
-    const { data } = await axios({
-      method: "GET",
-      url: options.url,
-      timeout: options.timeout || 30 * 1000,
-      headers: options.headers || {
-        "X-Requested-With": "XMLHttpRequest",
-        "content-type": "application/json;charset=UTF-8",
-      },
-    })
-      .then((response) => {
-        // return checkStatus(response)
-      })
-      .then((res) => {
-        // return checkCode(res)
-      });
+    const { data } = await axiosCall(options)
+
+    ctx.response.body = {
+      status: 200,
+      result: data.items[0],
+    }
+
+  } catch (error) {
+    console.error(`network fetch error - ${options.url} - ${error.message}`);
+  }
+};
+
+exports.getRestaurantList = async (ctx, next) => {
+  ctx.status = 200;
+  const options = {
+    method: "GET",
+    url: uri.restaurant,
+  };
+  try {
+    const { data } = await axiosCall(options)
+
+    ctx.response.body = {
+      status: 200,
+      result: data.items[0],
+    }
+
+  } catch (error) {
+    console.error(`network fetch error - ${options.url} - ${error.message}`);
+  }
+};
+
+exports.getHotelList = async (ctx, next) => {
+  ctx.status = 200;
+  const options = {
+    method: "GET",
+    url: uri.hotel,
+  };
+  try {
+    const { data } = await axiosCall(options)
+
+    ctx.response.body = {
+      status: 200,
+      result: data.items[0],
+    }
+
+  } catch (error) {
+    console.error(`network fetch error - ${options.url} - ${error.message}`);
+  }
+};
+
+exports.getActivityList = async (ctx, next) => {
+  ctx.status = 200;
+  const options = {
+    method: "GET",
+    url: uri.activity,
+  };
+  try {
+    const { data } = await axiosCall(options)
+
+    ctx.response.body = {
+      status: 200,
+      result: data.items[0],
+    }
+
   } catch (error) {
     console.error(`network fetch error - ${options.url} - ${error.message}`);
   }

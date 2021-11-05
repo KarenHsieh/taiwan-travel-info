@@ -1,9 +1,10 @@
 const axios = require("axios");
 const jsSHA = require("jssha");
+const ptx = require("./ptx");
 
 const getAuthorizationHeader = function () {
-  var AppID = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF";
-  var AppKey = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF";
+  var AppID = ptx.AppID;
+  var AppKey = ptx.AppKey;
 
   var GMTString = new Date().toGMTString();
   var ShaObj = new jsSHA("SHA-1", "TEXT");
