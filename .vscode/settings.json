@@ -32,4 +32,7 @@
     "**/.next": true,
     "**/node_module": true,
   },
+  "cSpell.words": [
+    "Scenicspot"
+  ],
 }

@@ -3,10 +3,11 @@ import { call, put } from 'redux-saga/effects'
 import * as AttractionsActions from '../actions/AttractionsActions'
 
 import axios from 'axios'
-import { api } from '../../config/uri/client'
+// import { api } from '../../config/uri/client'
 
 // 查詢所有景點
-export function* getScenicSpotList(action) { 
+export function* getScenicSpotList({ filterCity }) {
+  console.log('filterCity', filterCity)
   // yield put(CommonActions.isLoading(true))
   try {
     const response = yield call(axios.post, '/api/getAttractionsList')
@@ -17,7 +18,6 @@ export function* getScenicSpotList(action) {
     } else {
       console.log('getScenicSpot Error')
     }
-
   } catch (error) {
     console.log(error)
   }
@@ -26,7 +26,7 @@ export function* getScenicSpotList(action) {
 // 查詢所有餐廳
 export function* getRestaurantList(action) {
   try {
-    const response = yield call(axios.post, '/api/getRestaurantList')  
+    const response = yield call(axios.post, '/api/getRestaurantList')
     const { status, data } = response
 
     if (status === 200) {
@@ -34,7 +34,6 @@ export function* getRestaurantList(action) {
     } else {
       console.log('getRestaurantList Error')
     }
-
   } catch (error) {
     console.log(error)
   }
@@ -43,7 +42,7 @@ export function* getRestaurantList(action) {
 // 查詢所有旅館
 export function* getHotelList(action) {
   try {
-    const response = yield call(axios.post, '/api/getHotelList')  
+    const response = yield call(axios.post, '/api/getHotelList')
     const { status, data } = response
 
     if (status === 200) {
@@ -51,7 +50,6 @@ export function* getHotelList(action) {
     } else {
       console.log('getHotelList Error')
     }
-
   } catch (error) {
     console.log(error)
   }
@@ -60,7 +58,7 @@ export function* getHotelList(action) {
 // 查詢所有活動
 export function* getActivityList(action) {
   try {
-    const response = yield call(axios.post, '/api/getActivityList')  
+    const response = yield call(axios.post, '/api/getActivityList')
     const { status, data } = response
 
     if (status === 200) {
@@ -68,11 +66,7 @@ export function* getActivityList(action) {
     } else {
       console.log('getActivityList Error')
     }
-
   } catch (error) {
     console.log(error)
   }
 }
-
-
-

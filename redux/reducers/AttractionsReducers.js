@@ -1,23 +1,20 @@
 import * as actionTypes from '../constants'
 
 const initState = {
-  parameters: {},
+  filterCity: '',
+  scenicSpotList: {},
+  restaurantList: {},
+  hotelList: {},
+  activityList: {},
 }
 
 function AttractionsReducers(state = initState, action) {
   switch (action.type) {
-
-    case actionTypes.GET_SCENICSPOT_LIST_SUCCESS: {
-      const { prodNo, productName, itemList, source, selectedDate, noCalendarProduct, metaData } = action.payload.data
+    case actionTypes.GET_SCENICSPOT_LIST: {
+      const { city } = action.payload
       return {
         ...state,
-        prodNo,
-        productName,
-        itemList,
-        source,
-        selectedDate,
-        noCalendarProduct,
-        metaData,
+        filterCity: city,
       }
     }
 
@@ -29,7 +26,6 @@ function AttractionsReducers(state = initState, action) {
         pageError: status && status === 500,
       }
     }
-
 
     default:
       return state
