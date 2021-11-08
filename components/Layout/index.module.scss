@@ -1,0 +1,57 @@
+@import '../../styles/color.scss';
+
+$headerHeight: 80px;
+$footerHeight: 60px;
+
+.document {
+  width: 100%;
+  background-color: #becebb;
+
+  .header,
+  .footer {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+  }
+  .container {
+    width: 1200px;
+    min-height: calc(100vh - #{$headerHeight} - #{$footerHeight});
+    margin: auto;
+  }
+}
+
+.header {
+  height: $headerHeight;
+  border-bottom: 1px solid #e5e5e5;
+  justify-content: space-between;
+  padding: 0px 45px;
+
+  .otherPage {
+    display: flex;
+    align-items: center;
+    color: $font_gray;
+    > div {
+      padding: 0px 10px;
+      &:hover {
+        cursor: pointer;
+        &::after {
+          display: block;
+        }
+      }
+
+      &::after {
+        content: '';
+        display: none;
+        height: 2px;
+        background-color: #e0da48;
+      }
+    }
+  }
+}
+
+.footer {
+  height: $footerHeight;
+  background-color: #65895f;
+  color: #fff;
+  justify-content: center;
+}

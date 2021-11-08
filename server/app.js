@@ -33,15 +33,8 @@ app.prepare().then(() => {
   // index
   router.get('/', async ctx => {
     ctx.status = 200
-    // const loginInfo = await loginControllers.checkAuth(ctx);
-    // if (loginInfo && loginInfo.checkRole) {
-    //   ctx.status = 302;
-    //   ctx.redirect("/dashboard");
-    //   return;
-    // } else {
-    //   await app.render(ctx.req, ctx.res, "/", ctx.query);
-    // }
-    ctx.response.body = 'ok'
+    await app.render(ctx.req, ctx.res, '/home', ctx.query)
+    //ctx.response.body = 'ok'
     // ctx.respond = false;
   })
 

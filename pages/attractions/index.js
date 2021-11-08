@@ -22,12 +22,12 @@ export default Attractions
 
 const SearchBar = () => {
   const dispatch = useDispatch()
-  const { scenicspotList } = useSelector(state => state.AttractionsReducers)
+  const { scenicSpotList } = useSelector(state => state.AttractionsReducers)
 
   const [citySelectorOpen, setCitySelectorOpen] = useState(false)
 
   const handleClick = () => {
-    // setCitySelectorOpen(!citySelectorOpen)
+    setCitySelectorOpen(!citySelectorOpen)
 
     dispatch(AttractionsActions.getScenicspotList({ city: 'Taipei' }))
   }
