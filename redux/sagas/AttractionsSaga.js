@@ -14,7 +14,7 @@ export function* getScenicSpotList({ filterCity }) {
     const { status, data } = response
 
     if (status === 200) {
-      yield put(AttractionsActions.getAttractionsListSuccess())
+      yield put(AttractionsActions.getAttractionsListSuccess(data))
     } else {
       console.log('getScenicSpot Error')
     }

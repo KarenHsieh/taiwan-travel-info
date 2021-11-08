@@ -7,6 +7,13 @@ export const getScenicspotList = city => ({
   },
 })
 
+export const getScenicspotListSuccess = data => ({
+  type: actionTypes.GET_SCENICSPOT_LIST_SUCCESS,
+  payload: {
+    data,
+  },
+})
+
 export const getRestaurantList = city => ({
   type: actionTypes.GET_RESTAURANT_LIST,
   payload: {
@@ -25,13 +32,6 @@ export const getActivityList = city => ({
   type: actionTypes.GET_ACTIVITY_LIST,
   payload: {
     city,
-  },
-})
-
-export const getScenicspotListSuccess = data => ({
-  type: actionTypes.GET_SCENICSPOT_LIST_SUCCESS,
-  payload: {
-    data,
   },
 })
 

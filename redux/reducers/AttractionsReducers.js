@@ -2,10 +2,10 @@ import * as actionTypes from '../constants'
 
 const initState = {
   filterCity: '',
-  scenicSpotList: {},
-  restaurantList: {},
-  hotelList: {},
-  activityList: {},
+  scenicSpotList: '',
+  restaurantList: '',
+  hotelList: '',
+  activityList: '',
 }
 
 function AttractionsReducers(state = initState, action) {
@@ -15,6 +15,15 @@ function AttractionsReducers(state = initState, action) {
       return {
         ...state,
         filterCity: city,
+      }
+    }
+
+    case actionTypes.GET_SCENICSPOT_LIST_SUCCESS: {
+      const { data } = action.payload
+      console.log('action.payload', action.payload)
+      return {
+        ...state,
+        scenicSpotList: data,
       }
     }
 
