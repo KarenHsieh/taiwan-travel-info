@@ -28,13 +28,14 @@
       button {
         &:before {
           color: #c4c4c4;
+          opacity: 1;
         }
       }
       &.slick-active {
         button {
           &:before {
             color: #fff;
-            opacity: unset;
+            opacity: 1;
           }
         }
       }
