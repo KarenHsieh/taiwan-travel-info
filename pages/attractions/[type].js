@@ -1,18 +1,61 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 
 import ProductCard from '../../components/ProductCard'
+import Select from 'react-select'
 
 import * as AttractionsActions from '../../redux/actions/AttractionsActions'
+
+import { getCityListOptions, getCityCode } from '../../utils/cityCode'
+
+import { axiosCall, formatDate } from '../../server/tools'
 
 // Styles And Icons
 import styles from './index.module.scss'
 
 const Attractions = () => {
+  const router = useRouter()
+  const { type } = router.query
+
+  console.log('type', type)
+
   return (
     <div>
       <SearchBar />
+      {type === 'scenicSpot' ? (
+        <div className={styles.topic}>
+          <TopicCategory pictureUrl={'/images/scenicSpot1.png'} name={'自然風景類'} />
+          <TopicCategory pictureUrl={'/images/scenicSpot2.png'} name={'觀光工廠類'} />
+          <TopicCategory pictureUrl={'/images/scenicSpot3.png'} name={'休閒農業類'} />
+          <TopicCategory pictureUrl={'/images/scenicSpot4.png'} name={'生態類'} />
+          <TopicCategory pictureUrl={'/images/scenicSpot5.png'} name={'溫泉類'} />
+          <TopicCategory pictureUrl={'/images/scenicSpot6.png'} name={'自然風景類'} />
+          <TopicCategory pictureUrl={'/images/scenicSpot7.png'} name={'古蹟類'} />
+        </div>
+      ) : null}
+
+      {type === 'activity' ? (
+        <div className={styles.topic}>
+          <TopicCategory pictureUrl={'/images/activity1.png'} name={'節慶活動'} />
+          <TopicCategory pictureUrl={'/images/activity2.png'} name={'自行車活動'} />
+          <TopicCategory pictureUrl={'/images/activity3.png'} name={'遊憩活動'} />
+          <TopicCategory pictureUrl={'/images/activity4.png'} name={'產業文化活動'} />
+          <TopicCategory pictureUrl={'/images/activity5.png'} name={'年度活動'} />
+          <TopicCategory pictureUrl={'/images/activity6.png'} name={'四季活動'} />
+        </div>
+      ) : null}
+      {type === 'restaurant' ? (
+        <div className={styles.topic}>
+          <TopicCategory pictureUrl={'/images/food1.png'} name={'地方特產'} />
+          <TopicCategory pictureUrl={'/images/food2.png'} name={'中式美食'} />
+          <TopicCategory pictureUrl={'/images/food3.png'} name={'甜點冰品'} />
+          <TopicCategory pictureUrl={'/images/food4.png'} name={'異國料理'} />
+          <TopicCategory pictureUrl={'/images/food5.png'} name={'伴手禮'} />
+          <TopicCategory pictureUrl={'/images/food6.png'} name={'素食'} />
+        </div>
+      ) : null}
       <List />
     </div>
   )
@@ -38,32 +81,25 @@ const SearchBar = () => {
   return (
     <div>
       <div className={styles.searchBar}>
-        <div className={`${styles.cityPopover} ${citySelectorOpen ? styles.open : ''}`}>
-          <div className={styles.container}>
-            <div>台北市</div>
-            <div>基隆市</div>
-          </div>
+        <Select options={getCityListOptions()} placeholder={'全部縣市'} width="200px" />
+
+        <div>
+          <input className={styles.searchInput} type="text" placeholder="輸入關鍵字" />
         </div>
-        <input className={styles.citySelector} type="text" placeholder="輸入地區" onClick={handleClick} />
-        <input className={styles.searchInput} type="text" placeholder="輸入關鍵字" />
-        <button className={styles.searchButton} type="button">
-          搜尋
-        </button>
+        <div>
+          <button className={styles.searchButton} type="button">
+            搜尋
+          </button>
+        </div>
       </div>
-      <div className={styles.filterOptions}>
-        <button className={styles.filterButton} type="button" onClick={filterScenicSpot}>
-          景點
-        </button>
-        <button className={styles.filterButton} type="button">
-          餐飲
-        </button>
-        <button className={styles.filterButton} type="button">
-          旅宿
-        </button>
-        <button className={styles.filterButton} type="button">
-          活動
-        </button>
-      </div>
+    </div>
+  )
+}
+
+const TopicCategory = ({ pictureUrl, name }) => {
+  return (
+    <div className={styles.topicCategory} style={{ backgroundImage: `url(${pictureUrl})` }}>
+      {name}
     </div>
   )
 }
@@ -131,4 +167,21 @@ const List = () => {
   })
 
   return <div className={styles.list}>{list}</div>
+}
+
+export const getStaticProps = async ctx => {
+  const { data: scenicSpotTopicColumns } = await axiosCall({
+    method: 'GET',
+    url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot?$select=Class1&$filter=not(Class1%20eq%20null)&$top=150&$format=JSON`,
+  })
+
+  const scenicSpotTopicsArray = scenicSpotTopicColumns.map(topic => {
+    return topic.Class1
+  })
+
+  const scenicSpotTopics = [...new Set(scenicSpotTopicsArray)]
+
+  return {
+    props: { scenicSpotTopics },
+  }
 }

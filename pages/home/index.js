@@ -18,7 +18,7 @@ const Home = ({ recentActivityListTop4 }) => {
   const options = [
     { value: 'scenicSpot', label: '探索景點' },
     { value: 'activity', label: '節慶活動' },
-    { value: 'food', label: '品嚐美食' },
+    { value: 'restaurant', label: '品嚐美食' },
   ]
   return (
     <div>
