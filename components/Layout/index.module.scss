@@ -10,7 +10,6 @@ $footerHeight: 60px;
   .footer {
     display: flex;
     align-items: center;
-    background-color: #fff;
   }
   .container {
     width: 1200px;
@@ -21,10 +20,11 @@ $footerHeight: 60px;
 }
 
 .header {
-  height: $headerHeight;
-  border-bottom: 1px solid #e5e5e5;
-  justify-content: space-between;
-  padding: 0px 45px;
+  height: $headerHeight !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+  justify-content: space-between !important;
+  padding: 0px 45px !important;
+  background-color: #fff !important;
 
   .otherPage {
     display: flex;
@@ -55,8 +55,8 @@ $footerHeight: 60px;
 }
 
 .footer {
-  height: $footerHeight;
-  background-color: #65895f;
-  color: #fff;
-  justify-content: center;
+  height: $footerHeight !important;
+  background-color: #65895f !important;
+  color: #fff !important;
+  justify-content: center !important;
 }

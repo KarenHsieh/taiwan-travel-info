@@ -13,8 +13,16 @@ export const getList = query => {
   }
 }
 
-export const getListSuccess = results => ({
+export const getListSuccess = (results, dataCount) => ({
   type: actionTypes.GET_LIST_SUCCESS,
+  payload: {
+    results,
+    dataCount,
+  },
+})
+
+export const getListError = results => ({
+  type: actionTypes.GET_LIST_ERROR,
   payload: {
     results,
   },

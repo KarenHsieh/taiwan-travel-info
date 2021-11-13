@@ -52,6 +52,7 @@ exports.getScenicSpotList = async (ctx, next) => {
         ctx.response.body = {
           status: 200,
           result: data,
+          dataCount: data.length || 0,
         }
       } else {
         ctx.response.body = {
@@ -83,11 +84,24 @@ exports.getRestaurantList = async (ctx, next) => {
   console.log('getRestaurantList = ' + options.url)
 
   try {
-    const { data } = await axiosCall(options)
-
-    ctx.response.body = {
-      status: 200,
-      result: data,
+    const response = await axiosCall(options)
+    if (response) {
+      const { status, data } = response
+      if (status === 200) {
+        ctx.response.body = {
+          status: 200,
+          result: data,
+          dataCount: data.length || 0,
+        }
+      } else {
+        ctx.response.body = {
+          status: 404,
+        }
+      }
+    } else {
+      ctx.response.body = {
+        status: 404,
+      }
     }
   } catch (error) {
     console.error(`network fetch error - ${options.url} - ${error.message}`)
@@ -112,6 +126,7 @@ exports.getHotelList = async (ctx, next) => {
     ctx.response.body = {
       status: 200,
       result: data,
+      dataCount: data.length || 0,
     }
   } catch (error) {
     console.error(`network fetch error - ${options.url} - ${error.message}`)
@@ -135,11 +150,24 @@ exports.getActivityList = async (ctx, next) => {
   console.log('getActivityList = ' + options.url)
 
   try {
-    const { data } = await axiosCall(options)
-
-    ctx.response.body = {
-      status: 200,
-      result: data,
+    const response = await axiosCall(options)
+    if (response) {
+      const { status, data } = response
+      if (status === 200) {
+        ctx.response.body = {
+          status: 200,
+          result: data,
+          dataCount: data.length || 0,
+        }
+      } else {
+        ctx.response.body = {
+          status: 404,
+        }
+      }
+    } else {
+      ctx.response.body = {
+        status: 404,
+      }
     }
   } catch (error) {
     console.error(`network fetch error - ${options.url} - ${error.message}`)

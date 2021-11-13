@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import ProductCard from '../../components/ProductCard'
 import Breadcrumb from '../../components/Breadcrumb'
 import Select from 'react-select'
+import ReactPaginate from 'react-paginate'
 
 import * as AttractionsActions from '../../redux/actions/AttractionsActions'
 
@@ -21,7 +22,7 @@ const Attractions = () => {
   const { type } = router.query
 
   // console.log('type', type)
-  const { resultList } = useSelector(state => state.AttractionsReducers)
+  const { resultList, dataCount, isLoading, fetchDataError } = useSelector(state => state.AttractionsReducers)
 
   const pathname = {
     scenicSpot: '探索景點',
@@ -44,9 +45,23 @@ const Attractions = () => {
     <div>
       <Breadcrumb items={breadcrumb} />
       <SearchBar type={type} />
-      {resultList && Object.keys(resultList).length ? <List /> : <CategorySection type={type} />}
-
-      <List />
+      {resultList && Object.keys(resultList).length ? (
+        <List />
+      ) : !fetchDataError ? (
+        <CategorySection type={type} />
+      ) : (
+        <div className={styles.errorResult}>
+          <div>
+            <div>
+              <img src="/icons/nofound80.svg" alt="查無資料" />
+            </div>
+            <div>
+              <p>目前查無資料</p>
+              <p>請重新搜尋</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -100,6 +115,7 @@ const CategorySection = ({ type }) => {
 }
 
 const SearchBar = ({ type }) => {
+  const { isLoading } = useSelector(state => state.AttractionsReducers)
   const dispatch = useDispatch()
 
   const [searchCityCode, setSearchCityCode] = useState('')
@@ -127,19 +143,26 @@ const SearchBar = ({ type }) => {
   }
 
   const setCity = ({ label, value }) => {
-    console.log(value)
     setSearchCityCode(value)
     setSearchCityName(label)
   }
 
   const setKeyword = e => {
     const inputText = e.target.value.replace(/[&\|\\\*^%$!?_~#+=(){}@\-`\'\"\/]/g, '').trim()
-    console.log(inputText)
+
     setSearchKeyword(inputText)
   }
 
   const getList = () => {
     dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
+  }
+
+  let buttonStyle = {}
+  if (isLoading) {
+    buttonStyle = {
+      backgroundColor: '#b5c9b2',
+      cursor: 'not-allowed',
+    }
   }
 
   return (
@@ -151,7 +174,13 @@ const SearchBar = ({ type }) => {
           <input className={styles.searchInput} type="text" placeholder={inputPlaceholder} onChange={setKeyword} />
         </div>
         <div>
-          <button className={styles.searchButton} type="button" onClick={getList}>
+          <button
+            className={styles.searchButton}
+            type="button"
+            onClick={getList}
+            style={buttonStyle}
+            disabled={isLoading}
+          >
             搜尋
           </button>
         </div>
@@ -169,13 +198,48 @@ const TopicCategory = ({ pictureUrl, name }) => {
 }
 
 const List = () => {
-  const { resultList = [] } = useSelector(state => state.AttractionsReducers)
+  const itemsPerPage = 20
+  const [currentItems, setCurrentItems] = useState(null)
+  const [pageCount, setPageCount] = useState(0)
 
-  const list = resultList.map(item => {
-    return <ProductCard key={item.ID} item={item} />
-  })
+  const [itemOffset, setItemOffset] = useState(0)
 
-  return <div className={styles.list}>{list}</div>
+  const { resultList = [], dataCount } = useSelector(state => state.AttractionsReducers)
+
+  useEffect(() => {
+    const endOffset = itemOffset + itemsPerPage
+    setCurrentItems(resultList.slice(itemOffset, endOffset))
+    setPageCount(Math.ceil(dataCount / itemsPerPage))
+  }, [dataCount, itemOffset, resultList])
+
+  const handlePageClick = event => {
+    const newOffset = (event.selected * itemsPerPage) % dataCount
+    setItemOffset(newOffset)
+  }
+
+  return (
+    <>
+      <div className={styles.list}>
+        <PaginateItems currentItems={currentItems} />
+      </div>
+
+      <div class="pagination">
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </>
+  )
+}
+
+function PaginateItems({ currentItems }) {
+  return <>{currentItems && currentItems.map(item => <ProductCard key={item.ID} item={item} />)}</>
 }
 
 export default Attractions

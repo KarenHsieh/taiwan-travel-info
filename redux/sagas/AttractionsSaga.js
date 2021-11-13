@@ -57,14 +57,12 @@ export function* getList({ payload }) {
     }
   }
 
-  console.log('========apiUrl========')
-  console.log(apiUrl)
-
   try {
     const response = yield call(axios.get, apiUrl)
     const { status, data } = response
-    if (status === 200) {
-      yield put(AttractionsActions.getListSuccess(data.result))
+
+    if (status === 200 && data?.result && data.result.length) {
+      yield put(AttractionsActions.getListSuccess(data.result, data.dataCount))
     } else {
       yield put(AttractionsActions.getListError())
     }

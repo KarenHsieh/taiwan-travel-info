@@ -31,7 +31,7 @@ const ProductCard = ({ item }) => {
 
       <div>
         {isLoading ? (
-          <Skeleton count={2} height={16} />
+          <Skeleton height={36} />
         ) : (
           <>
             <div className={styles.name}>{Name}</div>

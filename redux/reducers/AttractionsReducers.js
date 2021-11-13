@@ -7,8 +7,9 @@ const initState = {
   // hotelList: '',
   // activityList: '',
   resultList: [],
+  dataCount: 0,
   isLoading: false,
-  error: false,
+  fetchDataError: false,
 }
 
 function AttractionsReducers(state = initState, action) {
@@ -25,8 +26,9 @@ function AttractionsReducers(state = initState, action) {
       return {
         ...state,
         resultList: action.payload.results,
+        dataCount: action.payload.dataCount,
         isLoading: false,
-        error: false,
+        fetchDataError: false,
       }
     }
 
@@ -34,7 +36,7 @@ function AttractionsReducers(state = initState, action) {
       return {
         ...state,
         isLoading: false,
-        error: true,
+        fetchDataError: true,
       }
     }
 
