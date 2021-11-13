@@ -1,11 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 // Styles And Icons
 import styles from './index.module.scss'
 
 const ProductCard = ({ item }) => {
   const { Name, Picture = '', City = '', Class1 = '', Class2 = '', Class3 = '' } = item
+
+  const { resultList, isLoading } = useSelector(state => state.AttractionsReducers)
 
   let mainPictureUrl = ''
   if (Picture) {
@@ -14,15 +20,24 @@ const ProductCard = ({ item }) => {
   }
   return (
     <div className={styles.card}>
-      <div className={styles.mainPicture} style={{ backgroundImage: `url(${mainPictureUrl})` }}></div>
+      {isLoading ? (
+        <Skeleton width={255} height={200} />
+      ) : (
+        <div
+          className={styles.mainPicture}
+          style={{ backgroundImage: `url(${mainPictureUrl}),url('/images/NoImage-255x200.svg')` }}
+        ></div>
+      )}
+
       <div>
-        <div>{Name}</div>
-        <div>{City}</div>
-        <div>
-          <span>{Class1}</span>
-          <span>{Class2}</span>
-          <span>{Class3}</span>
-        </div>
+        {isLoading ? (
+          <Skeleton count={2} height={16} />
+        ) : (
+          <>
+            <div className={styles.name}>{Name}</div>
+            <div className={styles.city}>{City}</div>
+          </>
+        )}
       </div>
     </div>
   )

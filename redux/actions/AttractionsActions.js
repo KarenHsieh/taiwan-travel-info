@@ -1,5 +1,25 @@
 import * as actionTypes from '../constants'
 
+export const getList = query => {
+  console.log('getList query = ')
+  console.log(query)
+  return {
+    type: actionTypes.GET_LIST,
+    payload: {
+      type: query.type || '',
+      city: query.city || '',
+      keyword: query.keyword || '',
+    },
+  }
+}
+
+export const getListSuccess = results => ({
+  type: actionTypes.GET_LIST_SUCCESS,
+  payload: {
+    results,
+  },
+})
+
 export const getScenicspotList = city => ({
   type: actionTypes.GET_SCENICSPOT_LIST,
   payload: {
@@ -33,9 +53,4 @@ export const getActivityList = city => ({
   payload: {
     city,
   },
-})
-
-export const getListFail = data => ({
-  type: actionTypes.GET_LIST_FAIL,
-  payload: data,
 })

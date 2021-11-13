@@ -1,12 +1,3 @@
-/* import { combineReducers } from 'redux'
-
-import AttractionsReducer from './AttractionsReducers'
-
-
-export default combineReducers({
-  AttractionsReducer,
-}) */
-
 import { HYDRATE } from 'next-redux-wrapper'
 import { combineReducers } from 'redux'
 

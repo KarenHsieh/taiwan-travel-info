@@ -13,9 +13,10 @@ $footerHeight: 60px;
     background-color: #fff;
   }
   .container {
-    width: 1110px;
+    width: 1200px;
     min-height: calc(100vh - #{$headerHeight} - #{$footerHeight});
     margin: auto;
+    padding: 60px 45px;
   }
 }
 

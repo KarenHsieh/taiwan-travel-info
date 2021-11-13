@@ -1,15 +1,43 @@
 import * as actionTypes from '../constants'
 
 const initState = {
-  filterCity: '',
-  scenicSpotList: '',
-  restaurantList: '',
-  hotelList: '',
-  activityList: '',
+  // filterCity: '',
+  // scenicSpotList: '',
+  // restaurantList: '',
+  // hotelList: '',
+  // activityList: '',
+  resultList: [],
+  isLoading: false,
+  error: false,
 }
 
 function AttractionsReducers(state = initState, action) {
   switch (action.type) {
+    case actionTypes.GET_LIST: {
+      return {
+        ...state,
+        ...action.payload,
+        isLoading: true,
+      }
+    }
+
+    case actionTypes.GET_LIST_SUCCESS: {
+      return {
+        ...state,
+        resultList: action.payload.results,
+        isLoading: false,
+        error: false,
+      }
+    }
+
+    case actionTypes.GET_LIST_ERROR: {
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
+      }
+    }
+
     case actionTypes.GET_SCENICSPOT_LIST: {
       const { city } = action.payload
       return {

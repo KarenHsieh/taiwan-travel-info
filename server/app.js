@@ -65,10 +65,11 @@ app.prepare().then(() => {
   })
 
   // 景點列表
+  // router.get('/api/getList', attractionControllers.getList)
   router.get('/api/getScenicSpotList', attractionControllers.getScenicSpotList)
-  // router.get('/api/getRestaurantList', attractionControllers.getList)
-  // router.get('/api/getHotelList', attractionControllers.getList)
-  // router.get('/api/getActivityList', attractionControllers.getList)
+  router.get('/api/getRestaurantList', attractionControllers.getRestaurantList)
+  // router.get('/api/getHotelList', attractionControllers.getHotelList)
+  router.get('/api/getActivityList', attractionControllers.getActivityList)
 
   //for post data (ctx.request.body)
   server.use(
