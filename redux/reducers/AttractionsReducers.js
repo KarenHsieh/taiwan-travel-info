@@ -1,11 +1,6 @@
 import * as actionTypes from '../constants'
 
 const initState = {
-  // filterCity: '',
-  // scenicSpotList: '',
-  // restaurantList: '',
-  // hotelList: '',
-  // activityList: '',
   resultList: [],
   dataCount: 0,
   isLoading: false,
@@ -40,29 +35,11 @@ function AttractionsReducers(state = initState, action) {
       }
     }
 
-    case actionTypes.GET_SCENICSPOT_LIST: {
-      const { city } = action.payload
+    case actionTypes.CLEAR_LIST: {
       return {
         ...state,
-        filterCity: city,
-      }
-    }
-
-    case actionTypes.GET_SCENICSPOT_LIST_SUCCESS: {
-      const { data } = action.payload
-      console.log('action.payload', action.payload)
-      return {
-        ...state,
-        scenicSpotList: data,
-      }
-    }
-
-    case actionTypes.GET_SCENICSPOT_LIST_FAIL: {
-      const { status } = action.payload
-      return {
-        ...state,
-        dataError: status && status === 404,
-        pageError: status && status === 500,
+        resultList: [],
+        dataCount: 0,
       }
     }
 

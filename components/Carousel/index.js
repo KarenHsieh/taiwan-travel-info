@@ -6,12 +6,6 @@ import styles from './index.module.scss'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
-import Image from 'next/image'
-import banner1 from '/public/banner/banner1.jpg'
-import banner2 from '/public/banner/banner2.jpg'
-
-// import Resizer from "react-image-file-resizer";
-
 const Carousel = () => {
   var settings = {
     dots: true,
@@ -24,25 +18,48 @@ const Carousel = () => {
   return (
     <div className={styles.carouselContainer}>
       <Slider {...settings}>
-        <div>
-          {/* 七股鹽田濕地 */}
-          {/* $filter=contains(Name, '鹽田') */}
-          <div className={styles.title}>台南市 ｜ 鹽田</div>
+        <div
+          className={styles.item}
+          onClick={() => {
+            window.open('/introduction?type=scenicSpot&ID=C1_315081600H_000152', '_blank')
+          }}
+        >
+          <div className={styles.title}>台南市 ｜ 北門鹽場</div>
           <img src="banner/banner1.jpg" alt="banner" />
         </div>
-        <div>
+        <div
+          className={styles.item}
+          onClick={() => {
+            window.open('/introduction?type=scenicSpot&ID=C1_379000000A_000117', '_blank')
+          }}
+        >
           <h3>新北市 ｜ 平溪天燈</h3>
           <img src="banner/banner2.jpg" alt="banner" />
         </div>
-        <div>
-          <h3>台北市 ｜ 北投圖書館</h3>
+        <div
+          className={styles.item}
+          onClick={() => {
+            window.open('/introduction?type=scenicSpot&ID=C1_379000000A_000011', '_blank')
+          }}
+        >
+          <h3>台北市 ｜ 新北投溫泉區</h3>
           <img src="banner/banner3.jpg" alt="banner" />
         </div>
-        <div>
-          <h3>台南市 ｜ 四草綠色隧道</h3>
+        <div
+          className={styles.item}
+          onClick={() => {
+            window.open('/introduction?type=scenicSpot&ID=C1_315081600H_000084', '_blank')
+          }}
+        >
+          <h3>台南市 ｜ 四草野生動物保護區</h3>
           <img src="banner/banner4.jpg" alt="banner" />
         </div>
-        <div>
+        <div
+          className={styles.item}
+          onClick={() => {
+            window.open('/introduction?type=scenicSpot&ID=C1_379000000A_000126', '_blank')
+          }}
+        >
           <h3>新北市 ｜ 野柳地質公園</h3>
           <img src="banner/banner5.jpg" alt="banner" />
         </div>

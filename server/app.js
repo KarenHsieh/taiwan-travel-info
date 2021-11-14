@@ -33,28 +33,6 @@ app.prepare().then(() => {
   // index
   router.get('/', async ctx => {
     ctx.status = 200
-    // try {
-    //   const response = await resultListControllers.getProductList(ctx)
-
-    //   if (response.status === 200) {
-    //     const query = Object.assign({}, ctx.query, {
-    //       headerType: 'standard',
-    //       footerType: 'standard',
-    //       PLATFORM: 'PC',
-    //       list: response.data,
-    //       urlQuery: ctx.query,
-    //     })
-    //     await app.render(ctx.req, ctx.res, '/list', query)
-    //     ctx.respond = false
-    //   } else {
-    //     ctx.status = response.status
-    //     console.error(`list prerender - [${response.status}] ${response.data}`)
-    //     await app.render(ctx.req, ctx.res, `/${response.status}`)
-    //   }
-    // } catch (error) {
-    //   ctx.status = 500
-    //   await app.render(ctx.req, ctx.res, '/500')
-    // }
     await app.render(ctx.req, ctx.res, '/home', ctx.query)
   })
 
@@ -65,7 +43,6 @@ app.prepare().then(() => {
   })
 
   // 景點列表
-  // router.get('/api/getList', attractionControllers.getList)
   router.get('/api/getScenicSpotList', attractionControllers.getScenicSpotList)
   router.get('/api/getRestaurantList', attractionControllers.getRestaurantList)
   // router.get('/api/getHotelList', attractionControllers.getHotelList)

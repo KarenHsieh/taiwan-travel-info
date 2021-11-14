@@ -8,18 +8,29 @@ import 'react-loading-skeleton/dist/skeleton.css'
 // Styles And Icons
 import styles from './index.module.scss'
 
-const ProductCard = ({ item }) => {
+const ProductCard = ({ item, type }) => {
   const { Name, Picture = '', City = '', Class1 = '', Class2 = '', Class3 = '' } = item
 
   const { resultList, isLoading } = useSelector(state => state.AttractionsReducers)
 
   let mainPictureUrl = ''
   if (Picture) {
-    const { PictureUrl1 = '', PictureDescription1 = '' } = Picture
+    const { PictureUrl1 = '' } = Picture
     mainPictureUrl = PictureUrl1
   }
+
+  const goIntroduction = item => {
+    const { ID } = item
+    window.location.href = `/introduction?type=${type}&ID=${ID}`
+  }
+
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      onClick={() => {
+        goIntroduction(item)
+      }}
+    >
       {isLoading ? (
         <Skeleton width={255} height={200} />
       ) : (

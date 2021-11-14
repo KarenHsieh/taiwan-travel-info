@@ -4,9 +4,9 @@ import App from 'next/app'
 import { END } from 'redux-saga'
 import { wrapper } from '../redux/store'
 
-import '../styles/reset.scss'
 import '../styles/global.scss'
 import Layout from '../components/Layout'
+import NextNProgress from 'nextjs-progressbar'
 
 class WrappedApp extends App {
   getInitialProps = async ({ Component, ctx }) => {
@@ -30,9 +30,12 @@ class WrappedApp extends App {
   render() {
     const { Component, pageProps } = this.props
     return (
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <>
+        <NextNProgress />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </>
     )
   }
 }

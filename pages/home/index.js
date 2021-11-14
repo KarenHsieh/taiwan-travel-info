@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import * as AttractionsActions from '../../redux/actions/AttractionsActions'
-
 // Component
 import Carousel from '../../components/Carousel'
 import Select from 'react-select'
@@ -12,31 +10,53 @@ import { axiosCall, formatDate } from '../../server/tools'
 
 // Styles And Icons
 import styles from './index.module.scss'
-import { ReactComponent as ArrowRight } from '/public/icons/arrow-right16_G.svg'
 
 const Home = ({ recentActivityListTop4 }) => {
+  const [searchType, setSearchType] = useState('')
+  const [searchKeyword, setSearchKeyword] = useState('')
+
   const options = [
     { value: 'scenicSpot', label: '探索景點' },
     { value: 'activity', label: '節慶活動' },
     { value: 'restaurant', label: '品嚐美食' },
   ]
+
+  const setType = ({ label, value }) => {
+    setSearchType(value)
+  }
+
+  const setKeyword = e => {
+    const inputText = e.target.value.replace(/[&\|\\\*^%$!?_~#+=(){}@\-`\'\"\/]/g, '').trim()
+
+    setSearchKeyword(inputText)
+  }
+
+  const goSearch = () => {
+    // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
+    window.location.href = `/attractions/${searchType}?keyword=${searchKeyword}`
+  }
+
   return (
     <div>
-      <div className={styles.topic}>
+      <div className={styles.top}>
         <div className={styles.slogan}>
           <div>探索台灣之美</div>
           <div>讓我們更親近這片土地</div>
-          <div>台灣旅遊景點導覽 Taiwan Travel Guide</div>
+          <div className={styles.other}>
+            <span>台灣旅遊景點導覽</span> Taiwan Travel Guide
+          </div>
         </div>
         <div className={styles.search}>
-          <div>
-            <Select options={options} />
+          <div className={styles.selector}>
+            <Select options={options} onChange={setType} placeholder={'請選擇分類'} />
+          </div>
+          <div className={styles.input}>
+            <input type="text" placeholder={'輸入關鍵字'} onChange={setKeyword} />
           </div>
           <div>
-            <input type="text" placeholder={'輸入景點關鍵字'} />
-          </div>
-          <div>
-            <button type="button">搜尋</button>
+            <button type="button" onClick={goSearch}>
+              搜尋
+            </button>
           </div>
         </div>
       </div>
@@ -45,7 +65,13 @@ const Home = ({ recentActivityListTop4 }) => {
       <div className={styles.recentActivity}>
         <div className={styles.title}>
           <div>近期活動</div>
-          <div>查看更多活動</div>
+          <div
+            onClick={() => {
+              window.open('/attractions/activity', '_blank')
+            }}
+          >
+            查看更多活動 >{' '}
+          </div>
         </div>
         <div className={styles.row}>
           {recentActivityListTop4.map(activity => {
@@ -57,7 +83,13 @@ const Home = ({ recentActivityListTop4 }) => {
       <div className={styles.block}>
         <div className={styles.title}>
           <div>熱門打卡景點</div>
-          <div>查看更多景點</div>
+          <div
+            onClick={() => {
+              window.open('/attractions/scenicSpot', '_blank')
+            }}
+          >
+            查看更多景點 >{' '}
+          </div>
         </div>
         <div className={styles.row}>
           <ItemCard pictureUrl={'/home/ScenicSpotPicture.png'} name={'龜山島牛奶海'} city={'宜蘭縣'} />
@@ -69,7 +101,13 @@ const Home = ({ recentActivityListTop4 }) => {
       <div className={styles.block}>
         <div className={styles.title}>
           <div>一再回訪美食</div>
-          <div>查看更多美食</div>
+          <div
+            onClick={() => {
+              window.open('/attractions/restaurant', '_blank')
+            }}
+          >
+            查看更多美食 >{' '}
+          </div>
         </div>
         <div className={styles.row}>
           <ItemCard pictureUrl={'/home/RestaurantPicture.png'} name={'金都餐廳'} city={'南投縣'} />

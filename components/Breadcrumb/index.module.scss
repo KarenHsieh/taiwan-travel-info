@@ -5,8 +5,15 @@
 
   .item {
     font: 16px;
+    font-weight: 400;
+    color: $font_green;
+
+    &:hover {
+      cursor: pointer;
+    }
+
     a {
-      color: $font_gray;
+      color: $font_green;
     }
 
     &:not(:last-child) {
@@ -15,6 +22,13 @@
         margin-left: 8px;
         margin-right: 8px;
         color: $font_gray;
+      }
+    }
+
+    &:last-child {
+      color: $font_gray;
+      &:hover {
+        cursor: default;
       }
     }
   }
