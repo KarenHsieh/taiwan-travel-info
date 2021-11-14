@@ -36,7 +36,7 @@
   "scripts": {
     "build": "./node_modules/next/dist/bin/next build",
     "start": "node ./server/app.js",
-    "server": "node ./server/app.js"
+    "server": "node app.js"
   },
   "eslintConfig": {
     "extends": [

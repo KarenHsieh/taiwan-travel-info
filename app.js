@@ -17,7 +17,7 @@ const dev = config.nodeEnv !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-const attractionControllers = require('./controllers/attractionControllers')
+const attractionControllers = require('./server/controllers/attractionControllers')
 
 //  errorHandler = require("./middleware/errorHandler");
 
