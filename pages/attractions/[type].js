@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
 
 import ProductCard from '../../components/ProductCard'
 import Breadcrumb from '../../components/Breadcrumb'
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import * as AttractionsActions from '../../redux/actions/AttractionsActions'
 
-import { getCityListOptions, getCityCode } from '../../utils/cityCode'
-
-import { axiosCall, formatDate } from '../../server/tools'
+import { getCityListOptions } from '../../utils/cityCode'
 
 // Styles And Icons
 import styles from './index.module.scss'
@@ -76,14 +75,17 @@ const CategorySection = ({ type }) => {
       {type === 'scenicSpot' ? (
         <>
           <h3 className={styles.category}>熱門分類</h3>
+
           <div className={styles.topic}>
-            <TopicCategory pictureUrl={'/images/scenicSpot1.png'} name={'自然風景類'} type={type} />
-            <TopicCategory pictureUrl={'/images/scenicSpot2.png'} name={'觀光工廠類'} type={type} />
-            <TopicCategory pictureUrl={'/images/scenicSpot3.png'} name={'休閒農業類'} type={type} />
-            <TopicCategory pictureUrl={'/images/scenicSpot4.png'} name={'生態類'} type={type} />
-            <TopicCategory pictureUrl={'/images/scenicSpot5.png'} name={'溫泉類'} type={type} />
-            <TopicCategory pictureUrl={'/images/scenicSpot6.png'} name={'自然風景類'} type={type} />
-            <TopicCategory pictureUrl={'/images/scenicSpot7.png'} name={'古蹟類'} type={type} />
+            <>
+              <TopicCategory pictureUrl={'/images/scenicSpot1.png'} name={'自然風景類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot2.png'} name={'觀光工廠類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot3.png'} name={'休閒農業類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot4.png'} name={'生態類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot5.png'} name={'溫泉類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot6.png'} name={'自然風景類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot7.png'} name={'古蹟類'} type={type} />
+            </>
           </div>
         </>
       ) : null}

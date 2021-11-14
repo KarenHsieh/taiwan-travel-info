@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
+import React from 'react'
+import { useSelector } from 'react-redux'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -9,9 +8,9 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import styles from './index.module.scss'
 
 const ProductCard = ({ item, type }) => {
-  const { Name, Picture = '', City = '', Class1 = '', Class2 = '', Class3 = '' } = item
+  const { Name, Picture = '', City = '' } = item
 
-  const { resultList, isLoading } = useSelector(state => state.AttractionsReducers)
+  const { isLoading } = useSelector(state => state.AttractionsReducers)
 
   let mainPictureUrl = ''
   if (Picture) {
