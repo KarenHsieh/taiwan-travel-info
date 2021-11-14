@@ -133,17 +133,24 @@ export function* getList({ payload }) {
       break
     }
     default: {
+      options = {
+        method: 'GET',
+        url: `${uri.scenicSpot}${city ? `/${city}/` : ''}`,
+      }
     }
   }
 
   try {
     const response = yield call(async () => {
+      console.log('======= options.url ========')
+      console.log(options.url)
       return await axiosCall(options)
     })
 
+    options = {}
     console.log('===============')
     console.log(response)
-    const { status, data } = response
+    const { status, data = [] } = response
 
     if (status === 200 && data && data.length) {
       yield put(AttractionsActions.getListSuccess(data, data.length))
