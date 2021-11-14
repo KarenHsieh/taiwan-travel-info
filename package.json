@@ -34,7 +34,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "build": "next build",
+    "build": "./node_modules/next/dist/bin/next build",
     "start": "node ./server/app.js",
     "server": "node ./server/app.js"
   },
