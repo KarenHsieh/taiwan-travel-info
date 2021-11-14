@@ -1,7 +1,6 @@
 {
   "name": "f2e-2021",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -38,6 +37,7 @@
     "start": "node ./server/app.js",
     "server": "node app.js"
   },
+  "main": "./pages/home/index.js",
   "eslintConfig": {
     "extends": [
       "react-app",
