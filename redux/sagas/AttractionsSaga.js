@@ -6,6 +6,8 @@ import * as AttractionsActions from '../actions/AttractionsActions'
 
 import { axiosCall, formatDate } from '../../server/tools'
 
+// 為了要用 next.js 原生的打包機制方便 deploy 所以改了這裡的寫法
+
 // export function* getList({ payload }) {
 //   const { type, city, keyword, category } = payload
 
@@ -142,13 +144,13 @@ export function* getList({ payload }) {
 
   try {
     const response = yield call(async () => {
-      console.log('======= options.url ========')
+      console.log('======= [debug] options.url ========')
       console.log(options.url)
       return await axiosCall(options)
     })
 
     options = {}
-    console.log('===============')
+    console.log('========== [debug] response ==========')
     console.log(response)
     const { status, data = [] } = response
 

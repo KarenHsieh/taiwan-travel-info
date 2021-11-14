@@ -59,6 +59,7 @@ app.prepare().then(() => {
   )
   // errorHandler
   // server.use(errorHandler());
+
   // routes
   server.use(router.routes())
 
