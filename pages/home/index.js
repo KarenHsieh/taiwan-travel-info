@@ -5,6 +5,7 @@ import Carousel from '../../components/Carousel'
 import Select from 'react-select'
 
 import { axiosCall, formatDate } from '../../server/tools'
+import { FiMapPin, FiChevronRight } from 'react-icons/fi'
 
 // Styles And Icons
 import styles from './index.module.scss'
@@ -68,7 +69,7 @@ const Home = ({ recentActivityListTop4 }) => {
               window.open('/attractions/activity', '_blank')
             }}
           >
-            查看更多活動 >{' '}
+            查看更多活動 <FiChevronRight />
           </div>
         </div>
         <div className={styles.row}>
@@ -86,14 +87,38 @@ const Home = ({ recentActivityListTop4 }) => {
               window.open('/attractions/scenicSpot', '_blank')
             }}
           >
-            查看更多景點 >{' '}
+            查看更多景點 <FiChevronRight />
           </div>
         </div>
         <div className={styles.row}>
-          <ItemCard pictureUrl={'/home/ScenicSpotPicture.png'} name={'龜山島牛奶海'} city={'宜蘭縣'} />
-          <ItemCard pictureUrl={'/home/ScenicSpotPicture-1.png'} name={'高美濕地(高美野生動...'} city={'台中市'} />
-          <ItemCard pictureUrl={'/home/ScenicSpotPicture-2.png'} name={'溪頭自然教育園區'} city={'南投縣'} />
-          <ItemCard pictureUrl={'/home/ScenicSpotPicture-3.png'} name={'九份老街'} city={'新北市'} />
+          <ItemCard
+            pictureUrl={'/home/ScenicSpotPicture.png'}
+            name={'九份老街'}
+            city={'新北市'}
+            type={'scenicSpot'}
+            itemId={'C1_379000000A_000298'}
+          />
+          <ItemCard
+            pictureUrl={'/home/ScenicSpotPicture-1.png'}
+            name={'溪頭自然教育園區'}
+            city={'南投縣'}
+            type={'scenicSpot'}
+            itemId={'C1_376480000A_000301'}
+          />
+          <ItemCard
+            pictureUrl={'/home/ScenicSpotPicture-2.png'}
+            name={'高美濕地(高美野生動...'}
+            city={'台中市'}
+            type={'scenicSpot'}
+            itemId={'C1_387000000A_000054'}
+          />
+          <ItemCard
+            pictureUrl={'/home/ScenicSpotPicture-3.png'}
+            name={'龜山島牛奶海'}
+            city={'宜蘭縣'}
+            type={'scenicSpot'}
+            itemId={'C1_315081800H_010073'}
+          />
         </div>
       </div>
       <div className={styles.block}>
@@ -104,14 +129,38 @@ const Home = ({ recentActivityListTop4 }) => {
               window.open('/attractions/restaurant', '_blank')
             }}
           >
-            查看更多美食 >{' '}
+            查看更多美食 <FiChevronRight />
           </div>
         </div>
         <div className={styles.row}>
-          <ItemCard pictureUrl={'/home/RestaurantPicture.png'} name={'金都餐廳'} city={'南投縣'} />
-          <ItemCard pictureUrl={'/home/RestaurantPicture-1.png'} name={'一中8兩碳烤雞排'} city={'台中市'} />
-          <ItemCard pictureUrl={'/home/RestaurantPicture-2.png'} name={'名根烤肉食材配送'} city={'新北市'} />
-          <ItemCard pictureUrl={'/home/RestaurantPicture-3.png'} name={'石桌羊肉店'} city={'嘉義縣'} />
+          <ItemCard
+            pictureUrl={'/home/RestaurantPicture.png'}
+            name={'金都餐廳'}
+            city={'南投縣'}
+            type={'restaurant'}
+            itemId={'C3_376480000A_000649'}
+          />
+          <ItemCard
+            pictureUrl={'/home/RestaurantPicture-1.png'}
+            name={'一中8兩碳烤雞排'}
+            city={'台中市'}
+            type={'restaurant'}
+            itemId={'C3_387000000A_003588'}
+          />
+          <ItemCard
+            pictureUrl={'/home/RestaurantPicture-2.png'}
+            name={'名根烤肉食材配送'}
+            city={'新北市'}
+            type={'restaurant'}
+            itemId={'C3_382000000A_206270'}
+          />
+          <ItemCard
+            pictureUrl={'/home/RestaurantPicture-3.png'}
+            name={'石桌羊肉店'}
+            city={'嘉義縣'}
+            type={'restaurant'}
+            itemId={'C3_315081300H_000017'}
+          />
         </div>
       </div>
     </div>
@@ -139,9 +188,12 @@ const ActivityCard = ({ activity }) => {
         </div>
         <div className={styles.name}>{Name}</div>
         <div className={styles.location}>
-          <div className={styles.city}>{City}</div>
+          <div className={styles.city}>
+            <FiMapPin />
+            {City}
+          </div>
           <div className={styles.moreInfo} onClick={() => {}}>
-            詳細介紹
+            詳細介紹 <FiChevronRight />
           </div>
         </div>
       </div>
@@ -150,16 +202,22 @@ const ActivityCard = ({ activity }) => {
 }
 
 const ItemCard = props => {
-  const { pictureUrl, name, city } = props
+  const { pictureUrl, name, city, type = 'scenicSpot', itemId = '' } = props
+
+  const goDetail = () => {
+    window.open(`introduction?type=${type}&ID=${itemId}`)
+  }
   return (
-    <div className={styles.itemCard}>
+    <div className={styles.itemCard} onClick={goDetail}>
       <div
         className={styles.thumbnail}
         style={{ backgroundImage: `url(${pictureUrl}),url(${'/images/NoImage-255x200.svg'})` }}
       ></div>
       <div className={styles.content}>
         <div className={styles.name}>{name}</div>
-        <div className={styles.location}>{city}</div>
+        <div className={styles.location}>
+          <FiMapPin /> {city}
+        </div>
       </div>
     </div>
   )

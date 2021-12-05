@@ -22,7 +22,7 @@ exports.getScenicSpotList = async (ctx, next) => {
             category ? ` AND Class1 eq ${category}` : ''
           }`
         : ''
-    }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+    }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
   }
 
   //console.log('getScenicSpotList = ' + options.url)
@@ -61,7 +61,7 @@ exports.getRestaurantList = async (ctx, next) => {
       city ? `/${city}/` : ''
     }?$filter=not(Class eq null) AND not(Picture eq null) AND not(City eq null)${
       keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class eq ${category}` : ''}` : ''
-    }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+    }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
   }
 
   console.log('getRestaurantList = ' + options.url)
@@ -98,7 +98,7 @@ exports.getHotelList = async (ctx, next) => {
     method: 'GET',
     url: `${uri.hotel}${city ? `/${city}/` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
       keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class1 eq ${category}` : ''}` : ''
-    }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+    }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
   }
 
   console.log('getHotelList = ' + options.url)
@@ -127,7 +127,7 @@ exports.getActivityList = async (ctx, next) => {
       new Date()
     )}&${
       keyword ? `contains(Name, '${keyword}')${category ? ` AND Class1 eq ${category}` : ''}` : ''
-    }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+    }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
   }
 
   console.log('getActivityList = ' + options.url)

@@ -110,7 +110,7 @@ export function* getList({ payload }) {
                 category ? ` AND Class1 eq ${category}` : ''
               }`
             : ''
-        }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+        }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
       break
     }
@@ -121,7 +121,7 @@ export function* getList({ payload }) {
           city ? `/${city}/` : ''
         }?$filter=not(Class eq null) AND not(Picture eq null) AND not(City eq null)${
           keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class eq ${category}` : ''}` : ''
-        }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+        }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
       break
     }
@@ -130,7 +130,7 @@ export function* getList({ payload }) {
         method: 'GET',
         url: `${uri.hotel}${city ? `/${city}/` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
           keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class1 eq ${category}` : ''}` : ''
-        }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=200' : ''}`,
+        }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
       break
     }
