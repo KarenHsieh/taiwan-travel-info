@@ -22,9 +22,9 @@ export const getListSuccess = (results, dataCount) => ({
 
 export const getListError = results => ({
   type: actionTypes.GET_LIST_ERROR,
-  payload: {
-    results,
-  },
+  // payload: {
+  //   results,
+  // },
 })
 
 export const clearList = () => ({

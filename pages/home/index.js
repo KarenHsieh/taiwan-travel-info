@@ -4,13 +4,14 @@ import React, { useState } from 'react'
 import Carousel from '../../components/Carousel'
 import Select from 'react-select'
 
-import { axiosCall, formatDate } from '../../server/tools'
+import { formatDate } from '../../server/utils/tools'
+import { axiosCall } from '../../server/utils/axios'
 import { FiMapPin, FiChevronRight } from 'react-icons/fi'
 
 // Styles And Icons
 import styles from './index.module.scss'
 
-const Home = ({ recentActivityListTop4 }) => {
+const Home = ({ recentActivityListTop4 = [] }) => {
   const [searchType, setSearchType] = useState('')
   const [searchKeyword, setSearchKeyword] = useState('')
 
@@ -34,6 +35,12 @@ const Home = ({ recentActivityListTop4 }) => {
     // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
     window.location.href = `/attractions/${searchType}?keyword=${searchKeyword}`
   }
+
+  const recentActivityList = recentActivityListTop4.length
+    ? recentActivityListTop4.map(activity => {
+        return <ActivityCard key={activity.ID} activity={activity} />
+      })
+    : null
 
   return (
     <div>
@@ -72,11 +79,7 @@ const Home = ({ recentActivityListTop4 }) => {
             查看更多活動 <FiChevronRight />
           </div>
         </div>
-        <div className={styles.row}>
-          {recentActivityListTop4.map(activity => {
-            return <ActivityCard key={activity.ID} activity={activity} />
-          })}
-        </div>
+        <div className={styles.row}>{recentActivityList}</div>
       </div>
 
       <div className={styles.block}>
@@ -225,20 +228,28 @@ const ItemCard = props => {
 
 export default Home
 
-export const getStaticProps = async ctx => {
-  const { data: recentActivityListTop4 } = await axiosCall({
-    method: 'GET',
-    url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
-      new Date()
-    )}&$orderby=StartTime asc&$top=4&$format=JSON`,
-  })
+export const getServerSideProps = async ctx => {
+  const { token = '' } = ctx.query
 
-  const { data: recentActivityList } = await axiosCall({
-    method: 'GET',
-    url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
-      new Date()
-    )}&$orderby=StartTime asc&$format=JSON`,
-  })
+  const { data: recentActivityListTop4 = [] } = await axiosCall(
+    {
+      method: 'GET',
+      url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
+        new Date()
+      )}&$orderby=StartTime asc&$top=4&$format=JSON`,
+    },
+    token
+  )
+
+  const { data: recentActivityList = [] } = await axiosCall(
+    {
+      method: 'GET',
+      url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
+        new Date()
+      )}&$orderby=StartTime asc&$format=JSON`,
+    },
+    token
+  )
 
   return {
     props: { recentActivityListTop4, recentActivityList },

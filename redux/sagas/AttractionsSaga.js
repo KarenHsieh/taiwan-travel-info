@@ -4,91 +4,13 @@ import * as AttractionsActions from '../actions/AttractionsActions'
 
 // import axios from 'axios'
 
-import { axiosCall, formatDate } from '../../server/tools'
-
-// 為了要用 next.js 原生的打包機制方便 deploy 所以改了這裡的寫法
-
-// export function* getList({ payload }) {
-//   const { type, city, keyword, category } = payload
-
-//   let apiUrl = ''
-//   switch (type) {
-//     case 'scenicSpot': {
-//       apiUrl = '/api/getScenicSpotList'
-//       if (city || keyword) {
-//         apiUrl += '?'
-//         if (city) {
-//           apiUrl += `city=${city}&`
-//         }
-
-//         if (keyword) {
-//           apiUrl += `keyword=${keyword}&`
-//         }
-//         if (category) {
-//           apiUrl += `category=${category}`
-//         }
-//       }
-//       break
-//     }
-//     case 'restaurant': {
-//       apiUrl = '/api/getRestaurantList'
-//       if (city || keyword) {
-//         apiUrl += '?'
-//         if (city) {
-//           apiUrl += `city=${city}&`
-//         }
-
-//         if (keyword) {
-//           apiUrl += `keyword=${keyword}&`
-//         }
-
-//         if (category) {
-//           apiUrl += `category=${category}`
-//         }
-//       }
-//       break
-//     }
-//     case 'activity': {
-//       apiUrl = '/api/getActivityList'
-//       if (city || keyword) {
-//         apiUrl += '?'
-//         if (city) {
-//           apiUrl += `city=${city}&`
-//         }
-
-//         if (keyword) {
-//           apiUrl += `keyword=${keyword}&`
-//         }
-
-//         if (category) {
-//           apiUrl += `category=${category}`
-//         }
-//       }
-//       break
-//     }
-//     default: {
-//       apiUrl = '/api/getScenicSpotList'
-//     }
-//   }
-
-//   try {
-//     const response = yield call(axios.get, apiUrl)
-//     const { status, data } = response
-
-//     if (status === 200 && data?.result && data.result.length) {
-//       yield put(AttractionsActions.getListSuccess(data.result, data.dataCount))
-//     } else {
-//       yield put(AttractionsActions.getListError())
-//     }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+import { formatDate } from '../../server/utils/tools'
+import { axiosCall } from '../../server/utils/axios'
 
 export function* getList({ payload }) {
   const { type, city, keyword, category } = payload
 
-  const apiBaseUri = 'https://ptx.transportdata.tw/MOTC/v2/'
+  const apiBaseUri = 'https://tdx.transportdata.tw/api/basic/v2/'
   const uri = {
     scenicSpot: `${apiBaseUri}Tourism/ScenicSpot`,
     restaurant: `${apiBaseUri}Tourism/Restaurant`,
@@ -103,35 +25,38 @@ export function* getList({ payload }) {
       options = {
         method: 'GET',
         url: `${uri.scenicSpot}${
-          city ? `/${city}/` : ''
+          city ? `/${city}` : ''
         }?$filter=not(Class1 eq null) AND not(Picture eq null) AND not(City eq null)${
           keyword
-            ? ` AND (contains(Name, '${keyword}') OR contains(Keyword, '${keyword}'))${
+            ? ` AND (contains(ScenicSpotName, '${keyword}') OR contains(Keyword, '${keyword}'))${
                 category ? ` AND Class1 eq ${category}` : ''
               }`
             : ''
         }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
+
       break
     }
     case 'restaurant': {
       options = {
         method: 'GET',
         url: `${uri.restaurant}${
-          city ? `/${city}/` : ''
+          city ? `/${city}` : ''
         }?$filter=not(Class eq null) AND not(Picture eq null) AND not(City eq null)${
           keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class eq ${category}` : ''}` : ''
         }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
+
       break
     }
     case 'activity': {
       options = {
         method: 'GET',
-        url: `${uri.hotel}${city ? `/${city}/` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
+        url: `${uri.hotel}${city ? `/${city}` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
           keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class1 eq ${category}` : ''}` : ''
         }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
+
       break
     }
     default: {
@@ -153,7 +78,9 @@ export function* getList({ payload }) {
     console.log('========== [debug] response ==========')
     console.log(response)
     const { status, data = [] } = response
-
+    // if (status === 429) {
+    //   // 跳出 API 請求上限提示
+    // }
     if (status === 200 && data && data.length) {
       yield put(AttractionsActions.getListSuccess(data, data.length))
     } else {

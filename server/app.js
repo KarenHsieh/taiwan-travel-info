@@ -10,14 +10,43 @@ const config = require('./config.js')
 const dev = config.nodeEnv !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
+const session = require('koa-session')
 
 const attractionControllers = require('./controllers/attractionControllers')
+const commonControllers = require('./controllers/commonControllers')
+
+const authRequiredMiddleware = require('./middleware/authRequired')
 
 //  errorHandler = require("./middleware/errorHandler");
+
+const CONFIG = {
+  key: 'koa.sess' /** (string) cookie key (default is koa.sess) */,
+  /** (number || 'session') maxAge in ms (default is 1 days) */
+  /** 'session' will result in a cookie that expires when session/browser is closed */
+  /** Warning: If a session cookie is stolen, this cookie will never expire */
+  maxAge: 86400000,
+  autoCommit: true /** (boolean) automatically commit headers (default true) */,
+  overwrite: true /** (boolean) can overwrite or not (default true) */,
+  httpOnly: true /** (boolean) httpOnly or not (default true) */,
+  signed: true /** (boolean) signed or not (default true) */,
+  rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */,
+  renew: false /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/,
+  secure: true /** (boolean) secure cookie*/,
+  sameSite: null /** (string) session cookie sameSite options (default null, don't set it) */,
+}
 
 app.prepare().then(() => {
   const server = new Koa()
   const router = new Router()
+
+  // server.use(
+  //   session({
+  //     secret: 'hubwiz app', //secret的值建议使用随机字符串
+  //     cookie: { maxAge: 60 * 1000 * 30 }, // 过期时间（毫秒）
+  //   })
+  // )
+
+  server.use(session(server))
 
   //Gzip
   server.use(koaConnect(compression()))
@@ -31,16 +60,41 @@ app.prepare().then(() => {
    */
 
   // index
-  router.get('/', async ctx => {
-    ctx.status = 200
-    await app.render(ctx.req, ctx.res, '/home', ctx.query)
+  router.get('/', async (ctx, next) => {
+    ctx.redirect('/home')
+    next()
   })
 
-  router.get('/attractions', async ctx => {
-    ctx.status = 200
-    await app.render(ctx.req, ctx.res, '/attractions', ctx.query)
-    ctx.respond = false
-  })
+  router.get(
+    '/home',
+    async (ctx, next) => {
+      // 驗證API TOKEN
+      await authRequiredMiddleware(ctx)
+      await next()
+    },
+    async ctx => {
+      ctx.status = 200
+      const query = Object.assign({}, ctx.query, { token: ctx.state.token })
+      await app.render(ctx.req, ctx.res, '/home', query)
+      ctx.respond = false
+    }
+  )
+
+  router.get(
+    '/attractions',
+    async (ctx, next) => {
+      // 驗證API TOKEN
+      await authRequiredMiddleware(ctx)
+      await next()
+    },
+    async ctx => {
+      ctx.status = 200
+      await app.render(ctx.req, ctx.res, '/attractions', ctx.query)
+      ctx.respond = false
+    }
+  )
+
+  router.post('/api/getToken', commonControllers.getToken)
 
   // 景點列表
   router.get('/api/getScenicSpotList', attractionControllers.getScenicSpotList)

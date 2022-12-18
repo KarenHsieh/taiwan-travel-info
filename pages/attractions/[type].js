@@ -11,7 +11,10 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 import * as AttractionsActions from '../../redux/actions/AttractionsActions'
 
-import { getCityListOptions } from '../../utils/cityCode'
+import { getCityListOptions, getCityName } from '../../utils/cityCode'
+
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 // Styles And Icons
 import styles from './index.module.scss'
@@ -19,7 +22,7 @@ import styles from './index.module.scss'
 const Attractions = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { type, keyword: keywordQuery = '' } = router.query
+  const { type, keyword: keywordQuery = '', city: cityQuery = '' } = router.query
 
   const { resultList, dataCount, isLoading, fetchDataError } = useSelector(state => state.AttractionsReducers)
 
@@ -44,10 +47,14 @@ const Attractions = () => {
     dispatch(AttractionsActions.clearList())
   }, [type])
 
+  useEffect(() => {
+    dispatch(AttractionsActions.getList({ type: type, city: cityQuery, keyword: keywordQuery }))
+  }, [keywordQuery, cityQuery])
+
   return (
     <div>
       <Breadcrumb items={breadcrumb} />
-      <SearchBar type={type} keywordQuery={keywordQuery} />
+      <SearchBar type={type} keywordQuery={keywordQuery} cityQuery={cityQuery} />
       {resultList && dataCount ? (
         <List type={type} />
       ) : !fetchDataError ? (
@@ -120,7 +127,7 @@ const CategorySection = ({ type }) => {
   )
 }
 
-const SearchBar = ({ type, keywordQuery }) => {
+const SearchBar = ({ type, keywordQuery, cityQuery }) => {
   const { isLoading } = useSelector(state => state.AttractionsReducers)
   const dispatch = useDispatch()
 
@@ -149,6 +156,8 @@ const SearchBar = ({ type, keywordQuery }) => {
   }
 
   const setCity = ({ label, value }) => {
+    console.log(label)
+    console.log(value)
     setSearchCityCode(value)
     setSearchCityName(label)
   }
@@ -159,8 +168,16 @@ const SearchBar = ({ type, keywordQuery }) => {
     setSearchKeyword(inputText)
   }
 
+  let queryString = ''
+
   const getList = () => {
-    dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
+    // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
+
+    queryString += `?${searchCityCode ? `city=${searchCityCode}` : ''}${
+      searchKeyword ? `&keyword=${searchKeyword}` : ''
+    }`
+    // window.history.pushState(null, null, `/attractions/${type}${encodeURI(queryString)}`)
+    window.location.href = `/attractions/${type}${encodeURI(queryString)}`
   }
 
   let buttonStyle = {}
@@ -175,7 +192,14 @@ const SearchBar = ({ type, keywordQuery }) => {
     <div>
       <div className={styles.searchBar}>
         <div className={styles.selector}>
-          <Select options={getCityListOptions()} placeholder={'全部縣市'} height={'100%'} onChange={setCity} />
+          <Select
+            options={getCityListOptions()}
+            placeholder={'選擇縣市'}
+            height={'100%'}
+            onChange={setCity}
+            defaultValue={{ label: getCityName(cityQuery), value: cityQuery }} //getCityListOptionIndex(cityQuery)
+            // value={{ label: searchCityName, value: searchCityCode }}
+          />
         </div>
 
         <div>
@@ -258,28 +282,9 @@ const List = ({ type }) => {
 }
 
 function PaginateItems({ currentItems, type = '' }) {
-  return <>{currentItems && currentItems.map(item => <ProductCard key={item.ID} item={item} type={type} />)}</>
+  return (
+    <>{currentItems && currentItems.map(item => <ProductCard key={item.ScenicSpotID} item={item} type={type} />)}</>
+  )
 }
 
 export default Attractions
-
-// export async function getStaticPaths() {
-//   return { paths: ['/attractions/scenicSpot', '/attractions/activity', '/attractions/restaurant'], fallback: true }
-// }
-
-// export const getStaticProps = async ctx => {
-//   const { data: scenicSpotTopicColumns } = await axiosCall({
-//     method: 'GET',
-//     url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot?$select=Class1&$filter=not(Class1%20eq%20null)&$top=150&$format=JSON`,
-//   })
-
-//   const scenicSpotTopicsArray = scenicSpotTopicColumns.map(topic => {
-//     return topic.Class1
-//   })
-
-//   const scenicSpotTopics = [...new Set(scenicSpotTopicsArray)]
-
-//   return {
-//     props: { scenicSpotTopics },
-//   }
-// }

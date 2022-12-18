@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useEffect, useRef, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 
@@ -9,7 +9,8 @@ import Carousel from '../../components/Carousel'
 import Breadcrumb from '../../components/Breadcrumb'
 import Select from 'react-select'
 
-import { axiosCall, formatDate } from '../../server/tools'
+import { formatDate } from '../../server/utils/tools'
+import { axiosCall } from '../../server/utils/axios'
 
 // Styles And Icons
 import styles from './index.module.scss'

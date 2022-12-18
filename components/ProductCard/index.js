@@ -8,7 +8,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import styles from './index.module.scss'
 
 const ProductCard = ({ item, type }) => {
-  const { Name, Picture = '', City = '' } = item
+  const { ScenicSpotName, Picture = '', City = '' } = item
 
   const { isLoading } = useSelector(state => state.AttractionsReducers)
 
@@ -44,7 +44,7 @@ const ProductCard = ({ item, type }) => {
           <Skeleton height={36} />
         ) : (
           <>
-            <div className={styles.name}>{Name}</div>
+            <div className={styles.name}>{ScenicSpotName}</div>
             <div className={styles.city}>{City}</div>
           </>
         )}

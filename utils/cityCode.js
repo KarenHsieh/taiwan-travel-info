@@ -33,6 +33,22 @@ export const getCityListOptions = () => {
   return cityListOptions
 }
 
+export const getCityListOptionIndex = code => {
+  const res = Object.keys(cityMappingTable).filter((cityName, index) => {
+    if (cityMappingTable[cityName] === code) return index
+  })
+
+  return res[0]
+}
+
 export const getCityCode = chineseName => {
   return cityMappingTable[chineseName]
+}
+
+export const getCityName = code => {
+  const res = Object.keys(cityMappingTable).filter(cityName => {
+    return cityMappingTable[cityName] === code
+  })
+
+  return res[0]
 }

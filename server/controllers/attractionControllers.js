@@ -1,7 +1,10 @@
 const axios = require('axios')
-const { axiosCall, formatDate } = require('../tools')
+const { formatDate } = require('../utils/tools')
+const { axiosCall } = require('../utils/axios')
 
-const apiBaseUri = 'https://ptx.transportdata.tw/MOTC/v2/'
+// const apiBaseUri = 'https://ptx.transportdata.tw/MOTC/v2/'
+const apiBaseUri = 'https://tdx.transportdata.tw/api/basic/v2/'
+
 const uri = {
   scenicSpot: `${apiBaseUri}Tourism/ScenicSpot`,
   restaurant: `${apiBaseUri}Tourism/Restaurant`,
