@@ -17,7 +17,7 @@ const Header = () => {
         <div>
           <Link
             href={{
-              pathname: '/attractions/[type]',
+              pathname: '/attractions',
               query: { type: 'scenicSpot' },
             }}
           >
@@ -27,7 +27,7 @@ const Header = () => {
         <div>
           <Link
             href={{
-              pathname: '/attractions/[type]',
+              pathname: '/attractions',
               query: { type: 'activity' },
             }}
           >
@@ -37,7 +37,7 @@ const Header = () => {
         <div>
           <Link
             href={{
-              pathname: '/attractions/[type]',
+              pathname: '/attractions',
               query: { type: 'restaurant' },
             }}
           >

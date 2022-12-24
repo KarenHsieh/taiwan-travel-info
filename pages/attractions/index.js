@@ -21,8 +21,8 @@ import styles from './index.module.scss'
 
 const Attractions = () => {
   const dispatch = useDispatch()
-  const router = useRouter()
-  const { type, keyword: keywordQuery = '', city: cityQuery = '' } = router.query
+
+  const { type, keyword: keywordQuery = '', city: cityQuery = '', apiToken } = useRouter().query
 
   const { resultList, dataCount, isLoading, fetchDataError } = useSelector(state => state.AttractionsReducers)
 
@@ -39,7 +39,7 @@ const Attractions = () => {
     },
     {
       label: pathname[type],
-      path: `/attractions/${type}`,
+      path: `/attractions?type=${type}`,
     },
   ]
 
@@ -48,8 +48,9 @@ const Attractions = () => {
   }, [type])
 
   useEffect(() => {
-    dispatch(AttractionsActions.getList({ type: type, city: cityQuery, keyword: keywordQuery }))
-  }, [keywordQuery, cityQuery])
+    console.log('apiToken', apiToken)
+    dispatch(AttractionsActions.getList({ type: type, city: cityQuery, keyword: keywordQuery, token: apiToken }))
+  }, [keywordQuery, cityQuery, apiToken])
 
   return (
     <div>
@@ -173,11 +174,11 @@ const SearchBar = ({ type, keywordQuery, cityQuery }) => {
   const getList = () => {
     // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
 
-    queryString += `?${searchCityCode ? `city=${searchCityCode}` : ''}${
+    queryString += `?type=${type}&${searchCityCode ? `city=${searchCityCode}` : ''}${
       searchKeyword ? `&keyword=${searchKeyword}` : ''
     }`
     // window.history.pushState(null, null, `/attractions/${type}${encodeURI(queryString)}`)
-    window.location.href = `/attractions/${type}${encodeURI(queryString)}`
+    window.location.href = `/attractions${encodeURI(queryString)}`
   }
 
   let buttonStyle = {}
@@ -266,7 +267,7 @@ const List = ({ type }) => {
         <PaginateItems currentItems={currentItems} type={type} />
       </div>
 
-      <div class="pagination">
+      <div className="pagination">
         <ReactPaginate
           breakLabel="..."
           nextLabel=">"
@@ -281,10 +282,41 @@ const List = ({ type }) => {
   )
 }
 
-function PaginateItems({ currentItems, type = '' }) {
-  return (
-    <>{currentItems && currentItems.map(item => <ProductCard key={item.ScenicSpotID} item={item} type={type} />)}</>
-  )
+function PaginateItems({ currentItems = [], type = '' }) {
+  let list = []
+  if (currentItems?.length) {
+    list = currentItems.map(item => {
+      let key = ''
+
+      switch (type) {
+        case 'scenicSpot': {
+          const { ScenicSpotID } = item
+          key = ScenicSpotID
+          break
+        }
+
+        case 'restaurant': {
+          const { RestaurantID } = item
+          key = RestaurantID
+          break
+        }
+
+        case 'activity': {
+          const { ActivityID } = item
+          key = ActivityID
+          break
+        }
+        default: {
+          break
+        }
+      }
+      return <ProductCard key={key} id={key} item={item} type={type} />
+    })
+  } else {
+    return null
+  }
+
+  return <>{list}</>
 }
 
 export default Attractions

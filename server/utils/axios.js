@@ -40,13 +40,15 @@ axios.interceptors.response.use(
 exports.axiosCall = (options, token = '') => {
   const method = options.method.toLocaleLowerCase()
 
-  let headers = ''
-  if (true) {
+  console.log('===> axiosCall token : ' + token)
+  // let headers = ''
+  if (token) {
     // headers = { 'authorization': 'Bearer ' + decryptedToken(token) }
-    headers = { 'authorization': 'Bearer ' + token }
+    options.headers = { 'authorization': 'Bearer ' + token }
   }
 
   console.log('=====> axiosCall')
+  console.log('headers => ' + options.headers)
   console.log({
     method: 'POST',
     url: options.url,
@@ -55,7 +57,7 @@ exports.axiosCall = (options, token = '') => {
     maxContentLength: options.maxContentLength || 10 * 1024 * 1024,
     maxBodyLength: options.maxBodyLength || 10 * 1024 * 1024,
     // headers: getAuthorizationHeader(), // old ptx api header
-    headers: headers || {
+    headers: options.headers || {
       'X-Requested-With': 'XMLHttpRequest',
       'Content-Type': 'application/json;charset=UTF-8',
     },
@@ -73,7 +75,7 @@ exports.axiosCall = (options, token = '') => {
         maxContentLength: options.maxContentLength || 10 * 1024 * 1024,
         maxBodyLength: options.maxBodyLength || 10 * 1024 * 1024,
         // headers: getAuthorizationHeader(), // old ptx api header
-        headers: headers || {
+        headers: options.headers || {
           'X-Requested-With': 'XMLHttpRequest',
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -90,7 +92,7 @@ exports.axiosCall = (options, token = '') => {
         url: options.url,
         timeout: 30 * 1000,
         // headers: getAuthorizationHeader(),
-        headers: headers || {
+        headers: options.headers || {
           'X-Requested-With': 'XMLHttpRequest',
           'Content-Type': 'application/json;charset=UTF-8',
         },

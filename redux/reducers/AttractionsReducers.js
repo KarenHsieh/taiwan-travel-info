@@ -5,6 +5,8 @@ const initState = {
   dataCount: 0,
   isLoading: false,
   fetchDataError: false,
+  top4Activity: [],
+  allActivity: [],
 }
 
 function AttractionsReducers(state = initState, action) {
@@ -40,6 +42,20 @@ function AttractionsReducers(state = initState, action) {
         ...state,
         resultList: [],
         dataCount: 0,
+      }
+    }
+
+    case actionTypes.GET_RECENT_ACTIVITY_LIST_TOP4_SUCCESS: {
+      return {
+        ...state,
+        top4Activity: action.payload,
+      }
+    }
+
+    case actionTypes.GET_RECENT_ACTIVITY_LIST_SUCCESS: {
+      return {
+        ...state,
+        allActivity: action.payload,
       }
     }
 

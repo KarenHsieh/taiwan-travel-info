@@ -7,7 +7,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 // Styles And Icons
 import styles from './index.module.scss'
 
-const ProductCard = ({ item, type }) => {
+const ProductCard = ({ id, item, type }) => {
   const { ScenicSpotName, Picture = '', City = '' } = item
 
   const { isLoading } = useSelector(state => state.AttractionsReducers)
@@ -19,8 +19,8 @@ const ProductCard = ({ item, type }) => {
   }
 
   const goIntroduction = item => {
-    const { ID } = item
-    window.location.href = `/introduction?type=${type}&ID=${ID}`
+    // const { ID } = item
+    window.location.href = `/introduction?type=${type}&ID=${id}`
   }
 
   return (

@@ -54,7 +54,7 @@ const Introduction = ({ introduction = {}, fetchDataError = false }) => {
     },
     {
       label: pathname[type],
-      path: `/attractions/${type}`,
+      path: `/attractions?type=${type}`,
     },
     {
       label: Name,

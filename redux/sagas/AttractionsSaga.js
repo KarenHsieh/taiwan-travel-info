@@ -8,7 +8,7 @@ import { formatDate } from '../../server/utils/tools'
 import { axiosCall } from '../../server/utils/axios'
 
 export function* getList({ payload }) {
-  const { type, city, keyword, category } = payload
+  const { type, city, keyword, category, token } = payload
 
   const apiBaseUri = 'https://tdx.transportdata.tw/api/basic/v2/'
   const uri = {
@@ -52,7 +52,7 @@ export function* getList({ payload }) {
     case 'activity': {
       options = {
         method: 'GET',
-        url: `${uri.hotel}${city ? `/${city}` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
+        url: `${uri.activity}${city ? `/${city}` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
           keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class1 eq ${category}` : ''}` : ''
         }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
       }
@@ -71,7 +71,7 @@ export function* getList({ payload }) {
     const response = yield call(async () => {
       console.log('======= [debug] options.url ========')
       console.log(options.url)
-      return await axiosCall(options)
+      return await axiosCall(options, token)
     })
 
     options = {}
@@ -88,5 +88,56 @@ export function* getList({ payload }) {
     }
   } catch (error) {
     console.error(`network fetch error - ${options.url} - ${error.message}`)
+  }
+}
+
+export function* getRecentActivityListTop4({ payload }) {
+  console.log('===> getRecentActivityListTop4 payload', payload)
+  const token = payload
+  const options = {
+    method: 'GET',
+    url:
+      'https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ' +
+      formatDate(new Date()) +
+      '&$orderby=StartTime asc&$top=4&$format=JSON',
+  }
+
+  try {
+    const response = yield call(async () => {
+      return await axiosCall(options, token)
+    })
+
+    console.log('========== [debug] response ==========')
+    console.log(response)
+    const { status, data = [] } = response
+
+    yield put(AttractionsActions.getRecentActivityListTop4Success(data))
+  } catch (error) {
+    console.error(`getRecentActivityListTop4 fetch error - ${options.url} - ${error.message}`)
+  }
+}
+
+// 暫時保留不用
+export function* getRecentActivityList({ payload }) {
+  const token = payload
+  const options = {
+    method: 'GET',
+    url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
+      new Date()
+    )}&$orderby=StartTime asc&$format=JSON`,
+  }
+
+  try {
+    const response = yield call(async () => {
+      return await axiosCall(options, token)
+    })
+
+    console.log('========== [debug] response ==========')
+    console.log(response)
+    const { status, data = [] } = response
+
+    yield put(AttractionsActions.getRecentActivityListSuccess(data))
+  } catch (error) {
+    console.error(`getRecentActivityList fetch error - ${options.url} - ${error.message}`)
   }
 }

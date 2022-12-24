@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Component
 import Carousel from '../../components/Carousel'
@@ -8,12 +10,27 @@ import { formatDate } from '../../server/utils/tools'
 import { axiosCall } from '../../server/utils/axios'
 import { FiMapPin, FiChevronRight } from 'react-icons/fi'
 
+import * as AttractionsActions from '../../redux/actions/AttractionsActions'
+
 // Styles And Icons
 import styles from './index.module.scss'
 
-const Home = ({ recentActivityListTop4 = [] }) => {
+const Home = () => {
+  // console.log('useRouter.query', useRouter().query)
+  const dispatch = useDispatch()
+  const { apiToken } = useRouter().query
+  // let apiToken = ''
+
+  const { top4Activity: recentActivityListTop4 } = useSelector(state => state.AttractionsReducers)
+
   const [searchType, setSearchType] = useState('')
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [recentActivityList, setRecentActivityList] = useState('')
+
+  useEffect(() => {
+    dispatch(AttractionsActions.getRecentActivityListTop4(apiToken))
+    // dispatch(AttractionsActions.getRecentActivityList(apiToken))
+  }, [])
 
   const options = [
     { value: 'scenicSpot', label: '探索景點' },
@@ -33,14 +50,18 @@ const Home = ({ recentActivityListTop4 = [] }) => {
 
   const goSearch = () => {
     // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
-    window.location.href = `/attractions/${searchType}?keyword=${searchKeyword}`
+    window.location.href = `/attractions/?type=${searchType}&keyword=${searchKeyword}`
   }
 
-  const recentActivityList = recentActivityListTop4.length
-    ? recentActivityListTop4.map(activity => {
+  useMemo(() => {
+    let list = []
+    if (recentActivityListTop4.length) {
+      list = recentActivityListTop4.map(activity => {
         return <ActivityCard key={activity.ID} activity={activity} />
       })
-    : null
+    }
+    setRecentActivityList(list)
+  }, [recentActivityListTop4])
 
   return (
     <div>
@@ -73,7 +94,7 @@ const Home = ({ recentActivityListTop4 = [] }) => {
           <div>近期活動</div>
           <div
             onClick={() => {
-              window.open('/attractions/activity', '_blank')
+              window.open('/attractions?type=activity', '_blank')
             }}
           >
             查看更多活動 <FiChevronRight />
@@ -87,7 +108,7 @@ const Home = ({ recentActivityListTop4 = [] }) => {
           <div>熱門打卡景點</div>
           <div
             onClick={() => {
-              window.open('/attractions/scenicSpot', '_blank')
+              window.open('/attractions?type=scenicSpot', '_blank')
             }}
           >
             查看更多景點 <FiChevronRight />
@@ -129,7 +150,7 @@ const Home = ({ recentActivityListTop4 = [] }) => {
           <div>一再回訪美食</div>
           <div
             onClick={() => {
-              window.open('/attractions/restaurant', '_blank')
+              window.open('/attractions?type=restaurant', '_blank')
             }}
           >
             查看更多美食 <FiChevronRight />
@@ -228,30 +249,30 @@ const ItemCard = props => {
 
 export default Home
 
-export const getServerSideProps = async ctx => {
-  const { token = '' } = ctx.query
+// export const getServerSideProps = async ctx => {
+//   const { apiToken = '' } = ctx.query
 
-  const { data: recentActivityListTop4 = [] } = await axiosCall(
-    {
-      method: 'GET',
-      url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
-        new Date()
-      )}&$orderby=StartTime asc&$top=4&$format=JSON`,
-    },
-    token
-  )
+//   const { data: recentActivityListTop4 = [] } = await axiosCall(
+//     {
+//       method: 'GET',
+//       url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
+//         new Date()
+//       )}&$orderby=StartTime asc&$top=4&$format=JSON`,
+//     },
+//     apiToken
+//   )
 
-  const { data: recentActivityList = [] } = await axiosCall(
-    {
-      method: 'GET',
-      url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
-        new Date()
-      )}&$orderby=StartTime asc&$format=JSON`,
-    },
-    token
-  )
+//   const { data: recentActivityList = [] } = await axiosCall(
+//     {
+//       method: 'GET',
+//       url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
+//         new Date()
+//       )}&$orderby=StartTime asc&$format=JSON`,
+//     },
+//     apiToken
+//   )
 
-  return {
-    props: { recentActivityListTop4, recentActivityList },
-  }
-}
+//   return {
+//     props: { recentActivityListTop4, recentActivityList },
+//   }
+// }

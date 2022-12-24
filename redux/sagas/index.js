@@ -6,6 +6,7 @@ import * as AttractionsSaga from './AttractionsSaga'
 
 function* rootSaga() {
   yield all([takeLatest(actionTypes.GET_LIST, AttractionsSaga.getList)])
+  yield all([takeLatest(actionTypes.GET_RECENT_ACTIVITY_LIST_TOP4, AttractionsSaga.getRecentActivityListTop4)])
 }
 
 export default rootSaga

@@ -8,7 +8,9 @@ const qs = require('qs')
 const ptx = require('../staticVar')
 
 module.exports = async ctx => {
-  const token = ctx.cookies.get('TOKEN') ? ctx.cookies.get('TOKEN').replace(/"/g, '') : ''
+  let access_token = ctx.cookies.get('TOKEN') || ''
+
+  // console.log('取 cookie = ' + ctx.cookies.get('TOKEN'))
 
   const parameter = {
     grant_type: 'client_credentials',
@@ -19,9 +21,7 @@ module.exports = async ctx => {
   // console.log('==============parameter===============')
   // console.log(JSON.stringify(parameter))
 
-  let access_token = {}
-
-  if (!token) {
+  if (!access_token) {
     const options = {
       method: 'POST',
       url: 'https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token',
@@ -37,25 +37,27 @@ module.exports = async ctx => {
     try {
       const { status, data } = await axiosCall(options)
 
+      // console.log('====== 取 TOKEN 一次 ======')
+
       // console.log('====== Response ======')
-      // console.log(status)
       // console.log(JSON.stringify(data))
 
       const { access_token: token = '' } = data
 
       // ctx.cookies.set('TOKEN', encryptedToken(token), {
-      ctx.cookies.set('TOKEN', token, {
-        secure: false,
-        httpOnly: true,
-        maxAge: 21600, // 6hr
-      })
+      // ctx.cookies.set('TOKEN', token, {
+      //   secure: false,
+      //   httpOnly: false, // true?
+      //   maxAge: 21600, // 6hr
+      // })
+
+      ctx.cookies.set('TOKEN', token, { maxAge: 21600 }) //6hr
 
       access_token = token
     } catch (error) {
       console.error(`fetch error - ${JSON.stringify(options)} - ${error.message}`)
     }
-    ctx.state.token = access_token
-  } else {
-    ctx.state.token = token
   }
+
+  ctx.state.apiToken = access_token
 }

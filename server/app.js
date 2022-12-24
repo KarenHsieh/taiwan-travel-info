@@ -74,7 +74,7 @@ app.prepare().then(() => {
     },
     async ctx => {
       ctx.status = 200
-      const query = Object.assign({}, ctx.query, { token: ctx.state.token })
+      const query = Object.assign({}, ctx.query, { apiToken: ctx.state.apiToken })
       await app.render(ctx.req, ctx.res, '/home', query)
       ctx.respond = false
     }
@@ -89,7 +89,8 @@ app.prepare().then(() => {
     },
     async ctx => {
       ctx.status = 200
-      await app.render(ctx.req, ctx.res, '/attractions', ctx.query)
+      const query = Object.assign({}, ctx.query, { apiToken: ctx.state.apiToken })
+      await app.render(ctx.req, ctx.res, '/attractions', query)
       ctx.respond = false
     }
   )
