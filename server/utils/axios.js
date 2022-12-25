@@ -48,7 +48,7 @@ exports.axiosCall = (options, token = '') => {
   }
 
   console.log('=====> axiosCall')
-  console.log('headers => ' + options.headers)
+  console.log('headers => ' + JSON.stringify(options.headers))
   console.log({
     method: 'POST',
     url: options.url,

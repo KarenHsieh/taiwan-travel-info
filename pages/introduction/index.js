@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
 // Component
@@ -21,13 +21,97 @@ const pathname = {
   restaurant: '品嚐美食',
 }
 
-const Introduction = ({ introduction = {}, fetchDataError = false }) => {
-  const router = useRouter()
-  const { type } = router.query
+const Introduction = () => {
+  const { type, apiToken, ID: productSeq } = useRouter().query
 
-  const {
-    ID,
-    Name,
+  const [introduction, setIntroduction] = useState({})
+  // const [productId, setProductId] = useState('')
+  const [productName, setProductName] = useState('')
+
+  useEffect(() => {
+    // let id = ''
+    let name = ''
+
+    switch (type) {
+      case 'scenicSpot':
+        // id = introduction.ScenicSpotID
+        name = introduction.ScenicSpotName
+        break
+      case 'activity':
+        // id = introduction.ActivityID
+        name = introduction.ActivityName
+        break
+      case 'restaurant':
+        // id = introduction.RestaurantID
+        name = introduction.RestaurantName
+        break
+      default:
+        break
+    }
+    // setProductId(id)
+    setProductName(name)
+  }, [introduction])
+
+  useEffect(() => {
+    // console.log('apiToken', apiToken)
+
+    const apiBaseUri = 'https://tdx.transportdata.tw/api/basic/v2/'
+    const uri = {
+      scenicSpot: `${apiBaseUri}Tourism/ScenicSpot`,
+      restaurant: `${apiBaseUri}Tourism/Restaurant`,
+      hotel: `${apiBaseUri}Tourism/Hotel`,
+      activity: `${apiBaseUri}Tourism/Activity`,
+    }
+
+    let url = uri[type]
+    switch (type) {
+      case 'scenicSpot': {
+        url = `${url}?$filter=ScenicSpotID eq '${productSeq}'&$format=JSON`
+        break
+      }
+
+      case 'restaurant': {
+        url = `${url}?$filter=RestaurantID eq '${productSeq}'&$format=JSON`
+        break
+      }
+
+      // case 'hotel': {
+      //   url += `${url}?$filter=HotelID eq '${ID}'&$format=JSON`
+      //   break
+      // }
+
+      case 'activity': {
+        url = `${url}?$filter=ActivityID eq '${productSeq}'&$format=JSON`
+        break
+      }
+      default: {
+        // url = `${url}?$filter=ID eq '${productSeq}'&$format=JSON`
+      }
+    }
+    console.log('url', url)
+
+    getData(url)
+    // }
+  }, [type, apiToken])
+
+  const getData = async url => {
+    const { data: introduction } = await axiosCall(
+      {
+        method: 'GET',
+        url: url,
+      },
+      apiToken
+    )
+
+    console.log('getData introduction', JSON.stringify(introduction))
+
+    setIntroduction(introduction[0])
+  }
+
+  /*  const {
+    ScenicSpotID: ID,
+    ScenicSpotName: Name,
+    Description = '',
     DescriptionDetail = '',
     Picture = {},
     Class1 = '',
@@ -42,10 +126,11 @@ const Introduction = ({ introduction = {}, fetchDataError = false }) => {
     OpenTime = '',
     StartTime = '',
     EndTime = '',
-  } = introduction
+    ParkingPosition = '',
+  } = introduction */
 
-  const { PictureUrl1 = '', PictureDescription1 = '' } = Picture
-  const { PositionLon = '', PositionLat = '' } = Position
+  const { PictureUrl1 = '', PictureDescription1 = '' } = introduction?.Picture || {}
+  const { PositionLon = '', PositionLat = '' } = introduction?.Position || {}
 
   const breadcrumb = [
     {
@@ -57,7 +142,7 @@ const Introduction = ({ introduction = {}, fetchDataError = false }) => {
       path: `/attractions?type=${type}`,
     },
     {
-      label: Name,
+      label: productName,
     },
   ]
 
@@ -74,64 +159,67 @@ const Introduction = ({ introduction = {}, fetchDataError = false }) => {
         style={{ backgroundImage: `url(${PictureUrl1}), url(${'/images/NoImage-1100x400.svg'})` }}
       ></div>
       <div className={styles.detail}>
-        <div className={styles.name}>{Name}</div>
-        {Class1 || Class2 || Class3 ? (
+        <div className={styles.name}>{introduction.productName}</div>
+        {introduction?.Class1 || introduction?.Class2 || introduction?.Class3 ? (
           <div className={styles.class}>
-            {Class1 && <div>{Class1}</div>}
-            {Class2 && <div>{Class2}</div>}
-            {Class3 && <div>{Class3}</div>}
+            {introduction?.Class1 && <div>{introduction.Class1}</div>}
+            {introduction?.Class2 && <div>{introduction.Class2}</div>}
+            {introduction?.Class3 && <div>{introduction.Class3}</div>}
           </div>
         ) : null}
 
-        {DescriptionDetail && <div className={styles.description}>{DescriptionDetail}</div>}
+        {introduction?.Description && <div className={styles.description}>{introduction.Description}</div>}
+        {!introduction?.Description && introduction?.DescriptionDetail && (
+          <div className={styles.description}>{introduction.DescriptionDetail}</div>
+        )}
 
         <div className={styles.extraData}>
           <div className={styles.contact}>
-            {OpenTime && (
+            {introduction?.OpenTime && (
               <div>
                 <b>營業時間：</b>
-                {OpenTime}
+                {introduction.OpenTime}
               </div>
             )}
-            {StartTime && EndTime && (
+            {introduction?.StartTime && introduction?.EndTime && (
               <div>
                 <b>活動時間：</b>
-                {`${formatDate(StartTime)} 至 ${formatDate(EndTime)}`}
+                {`${formatDate(introduction.StartTime)} 至 ${formatDate(introduction.EndTime)}`}
               </div>
             )}
-            {Phone && (
+            {introduction?.Phone && (
               <div>
                 <b>聯絡電話：</b>
-                {Phone}
+                {introduction.Phone}
               </div>
             )}
-            {Address && (
+            {introduction?.Address && (
               <div>
                 <b>地址：</b>
-                {Address}
+                {introduction.Address}
               </div>
             )}
-            {Organizer && (
+            {introduction?.Organizer && (
               <div>
                 <b>主辦單位：</b>
-                {Organizer}
+                {introduction.Organizer}
               </div>
             )}
-            {WebsiteUrl && (
+            {introduction?.WebsiteUrl && (
               <div>
                 <b>官方網站：</b>
-                {WebsiteUrl}
+                {introduction.WebsiteUrl}
               </div>
             )}
-            {Remarks && (
+            {introduction?.Remarks && (
               <div>
                 <b>備註：</b>
-                {Remarks}
+                {introduction.Remarks}
               </div>
             )}
           </div>
           <div className={styles.map}>
-            {mapUrl && <iframe width="540" height="250" frameborder="0" src={mapUrl}></iframe>}
+            {mapUrl && <iframe width="540" height="250" frameBorder="0" src={mapUrl}></iframe>}
           </div>
         </div>
       </div>
@@ -140,39 +228,3 @@ const Introduction = ({ introduction = {}, fetchDataError = false }) => {
 }
 
 export default Introduction
-
-export const getServerSideProps = async ctx => {
-  const { type, ID } = ctx.query
-
-  const apiBaseUri = 'https://ptx.transportdata.tw/MOTC/v2/'
-  const uri = {
-    scenicSpot: `${apiBaseUri}Tourism/ScenicSpot`,
-    restaurant: `${apiBaseUri}Tourism/Restaurant`,
-    hotel: `${apiBaseUri}Tourism/Hotel`,
-    activity: `${apiBaseUri}Tourism/Activity`,
-  }
-
-  console.log(`${uri[type]}?$filter=ID eq '${ID}'&$format=JSON`)
-
-  try {
-    const { data: introduction } = await axiosCall({
-      method: 'GET',
-      url: `${uri[type]}?$filter=ID eq '${ID}'&$format=JSON`,
-    })
-
-    if (introduction.length) {
-      return {
-        props: { introduction: introduction[0] },
-      }
-    } else {
-      return {
-        props: { fetchDataError: true },
-      }
-    }
-  } catch (error) {
-    console.error(`network fetch error - ${error.message}`)
-    return {
-      props: { fetchDataError: true },
-    }
-  }
-}

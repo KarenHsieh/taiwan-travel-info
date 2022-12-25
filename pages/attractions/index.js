@@ -177,7 +177,6 @@ const SearchBar = ({ type, keywordQuery, cityQuery }) => {
     queryString += `?type=${type}&${searchCityCode ? `city=${searchCityCode}` : ''}${
       searchKeyword ? `&keyword=${searchKeyword}` : ''
     }`
-    // window.history.pushState(null, null, `/attractions/${type}${encodeURI(queryString)}`)
     window.location.href = `/attractions${encodeURI(queryString)}`
   }
 
@@ -245,7 +244,6 @@ const List = ({ type }) => {
   const itemsPerPage = 20
   const [currentItems, setCurrentItems] = useState(null)
   const [pageCount, setPageCount] = useState(0)
-
   const [itemOffset, setItemOffset] = useState(0)
 
   const { resultList = [], dataCount } = useSelector(state => state.AttractionsReducers)

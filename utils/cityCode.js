@@ -1,4 +1,5 @@
 const cityMappingTable = {
+  '請選擇城市': '',
   '臺北市': 'Taipei',
   '新北市': 'NewTaipei',
   '桃園市': 'Taoyuan',

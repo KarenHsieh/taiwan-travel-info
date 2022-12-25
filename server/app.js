@@ -95,6 +95,21 @@ app.prepare().then(() => {
     }
   )
 
+  router.get(
+    '/introduction',
+    async (ctx, next) => {
+      // 驗證API TOKEN
+      await authRequiredMiddleware(ctx)
+      await next()
+    },
+    async ctx => {
+      ctx.status = 200
+      const query = Object.assign({}, ctx.query, { apiToken: ctx.state.apiToken })
+      await app.render(ctx.req, ctx.res, '/introduction', query)
+      ctx.respond = false
+    }
+  )
+
   router.post('/api/getToken', commonControllers.getToken)
 
   // 景點列表
