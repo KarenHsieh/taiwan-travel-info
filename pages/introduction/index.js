@@ -1,13 +1,10 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useSelector, useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
 
 // Component
 import Carousel from '../../components/Carousel'
 import Breadcrumb from '../../components/Breadcrumb'
-import Select from 'react-select'
 
 import { formatDate } from '../../server/utils/tools'
 import { axiosCall } from '../../server/utils/axios'
@@ -25,30 +22,30 @@ const Introduction = () => {
   const { type, apiToken, ID: productSeq } = useRouter().query
 
   const [introduction, setIntroduction] = useState({})
-  // const [productId, setProductId] = useState('')
+  const [detailTitle, setDetailTitle] = useState('')
   const [productName, setProductName] = useState('')
 
   useEffect(() => {
-    // let id = ''
+    let title = ''
     let name = ''
 
     switch (type) {
       case 'scenicSpot':
-        // id = introduction.ScenicSpotID
+        title = '景點介紹：'
         name = introduction.ScenicSpotName
         break
       case 'activity':
-        // id = introduction.ActivityID
+        title = '活動介紹：'
         name = introduction.ActivityName
         break
       case 'restaurant':
-        // id = introduction.RestaurantID
+        title = '餐廳介紹：'
         name = introduction.RestaurantName
         break
       default:
         break
     }
-    // setProductId(id)
+    setDetailTitle(title)
     setProductName(name)
   }, [introduction])
 
@@ -162,12 +159,13 @@ const Introduction = () => {
         <div className={styles.name}>{introduction.productName}</div>
         {introduction?.Class1 || introduction?.Class2 || introduction?.Class3 ? (
           <div className={styles.class}>
-            {introduction?.Class1 && <div>{introduction.Class1}</div>}
-            {introduction?.Class2 && <div>{introduction.Class2}</div>}
-            {introduction?.Class3 && <div>{introduction.Class3}</div>}
+            {introduction?.Class1 && <div>#{introduction.Class1}</div>}
+            {introduction?.Class2 && <div>#{introduction.Class2}</div>}
+            {introduction?.Class3 && <div>#{introduction.Class3}</div>}
           </div>
         ) : null}
 
+        <span className={styles.detailTitle}>{detailTitle}</span>
         {introduction?.Description && <div className={styles.description}>{introduction.Description}</div>}
         {!introduction?.Description && introduction?.DescriptionDetail && (
           <div className={styles.description}>{introduction.DescriptionDetail}</div>
