@@ -10,30 +10,14 @@ const config = require('./config.js')
 const dev = config.nodeEnv !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
-const session = require('koa-session')
+// const session = require('koa-session')
 
-const attractionControllers = require('./controllers/attractionControllers')
-const commonControllers = require('./controllers/commonControllers')
+// const attractionControllers = require('./controllers/attractionControllers')
+// const commonControllers = require('./controllers/commonControllers')
 
 const authRequiredMiddleware = require('./middleware/authRequired')
 
 //  errorHandler = require("./middleware/errorHandler");
-
-const CONFIG = {
-  key: 'koa.sess' /** (string) cookie key (default is koa.sess) */,
-  /** (number || 'session') maxAge in ms (default is 1 days) */
-  /** 'session' will result in a cookie that expires when session/browser is closed */
-  /** Warning: If a session cookie is stolen, this cookie will never expire */
-  maxAge: 86400000,
-  autoCommit: true /** (boolean) automatically commit headers (default true) */,
-  overwrite: true /** (boolean) can overwrite or not (default true) */,
-  httpOnly: true /** (boolean) httpOnly or not (default true) */,
-  signed: true /** (boolean) signed or not (default true) */,
-  rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */,
-  renew: false /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/,
-  secure: true /** (boolean) secure cookie*/,
-  sameSite: null /** (string) session cookie sameSite options (default null, don't set it) */,
-}
 
 app.prepare().then(() => {
   const server = new Koa()
@@ -46,7 +30,7 @@ app.prepare().then(() => {
   //   })
   // )
 
-  server.use(session(server))
+  // server.use(session(server))
 
   //Gzip
   server.use(koaConnect(compression()))
@@ -110,13 +94,13 @@ app.prepare().then(() => {
     }
   )
 
-  router.post('/api/getToken', commonControllers.getToken)
+  // router.post('/api/getToken', commonControllers.getToken)
 
   // 景點列表
-  router.get('/api/getScenicSpotList', attractionControllers.getScenicSpotList)
-  router.get('/api/getRestaurantList', attractionControllers.getRestaurantList)
-  // router.get('/api/getHotelList', attractionControllers.getHotelList)
-  router.get('/api/getActivityList', attractionControllers.getActivityList)
+  // router.get('/api/getScenicSpotList', attractionControllers.getScenicSpotList)
+  // router.get('/api/getRestaurantList', attractionControllers.getRestaurantList)
+  // // router.get('/api/getHotelList', attractionControllers.getHotelList)
+  // router.get('/api/getActivityList', attractionControllers.getActivityList)
 
   //for post data (ctx.request.body)
   server.use(

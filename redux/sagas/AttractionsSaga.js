@@ -24,15 +24,13 @@ export function* getList({ payload }) {
     case 'scenicSpot': {
       options = {
         method: 'GET',
-        url: `${uri.scenicSpot}${
-          city ? `/${city}` : ''
-        }?$filter=not(Class1 eq null) AND not(Picture eq null) AND not(City eq null)${
-          keyword
-            ? ` AND (contains(ScenicSpotName, '${keyword}') OR contains(Keyword, '${keyword}'))${
-                category ? ` AND Class1 eq ${category}` : ''
-              }`
-            : ''
-        }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
+        url:
+          uri.scenicSpot +
+          (city ? '/' + city : '') +
+          '?$filter=not(Class1 eq null) AND not(Picture eq null) AND not(City eq null)' +
+          (keyword ? " AND (contains(ScenicSpotName, '" + keyword + "') OR contains(Keyword, '" + keyword + "')" : '') +
+          (category ? "AND Class1 eq '" + category + "'" : '') +
+          '&$orderby=ScenicSpotID asc&$format=JSON&$top=200',
       }
 
       break
@@ -40,11 +38,13 @@ export function* getList({ payload }) {
     case 'restaurant': {
       options = {
         method: 'GET',
-        url: `${uri.restaurant}${
-          city ? `/${city}` : ''
-        }?$filter=not(Class eq null) AND not(Picture eq null) AND not(City eq null)${
-          keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class eq ${category}` : ''}` : ''
-        }&$orderby=UpdateTime desc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
+        url:
+          uri.restaurant +
+          (city ? '/' + city : '') +
+          '?$filter=not(Class eq null) AND not(Picture eq null) AND not(City eq null)' +
+          (keyword && " AND contains(Name, '" + keyword + "')") +
+          (category && " AND Class eq '" + category + "'") +
+          '&$orderby=RestaurantID asc&$format=JSON&$top=200',
       }
 
       break
@@ -52,9 +52,14 @@ export function* getList({ payload }) {
     case 'activity': {
       options = {
         method: 'GET',
-        url: `${uri.activity}${city ? `/${city}` : ''}?$filter=date(StartTime) ge ${formatDate(new Date())}${
-          keyword ? ` AND contains(Name, '${keyword}')${category ? ` AND Class1 eq ${category}` : ''}` : ''
-        }&$orderby=StartTime asc&$format=JSON${!city && !keyword ? '&$top=100' : ''}`,
+        url:
+          uri.activity +
+          (city ? '/' + city : '') +
+          '?$filter=date(StartTime) ge ' +
+          formatDate(new Date()) +
+          (keyword && " AND contains(Name, '" + keyword + "')") +
+          (category && " AND Class1 eq '" + category + "'") +
+          '&$orderby=StartTime asc&$format=JSON&$top=200',
       }
 
       break
@@ -69,13 +74,13 @@ export function* getList({ payload }) {
 
   try {
     const response = yield call(async () => {
-      console.log('======= [debug] options.url ========')
+      console.log('[debug] options.url')
       console.log(options.url)
       return await axiosCall(options, token)
     })
 
     options = {}
-    console.log('========== [debug] response ==========')
+    console.log('[debug] response ==========')
     console.log(response)
     const { status, data = [] } = response
     // if (status === 429) {

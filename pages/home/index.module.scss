@@ -4,6 +4,7 @@
   display: flex;
   padding: 0px 95px;
   margin-bottom: 57px;
+
   .slogan {
     font-size: 48px;
     line-height: 69px;
@@ -20,18 +21,21 @@
 
   .search {
     width: 350px;
-    > div {
+
+    >div {
       margin-bottom: 7px;
     }
 
     input {
       width: 350px;
-      padding: 11px 30px;
+      padding: 12px;
       background: #f9f9f9;
       border: 1px solid #e6e6e6;
       box-sizing: border-box;
       border-radius: 5px;
+      font-size: 16px;
     }
+
     button {
       width: 350px;
       height: 50px;
@@ -102,6 +106,7 @@
     color: $font_gray;
     margin-bottom: 3px;
   }
+
   .name {
     font-size: 22px;
     color: $font_black;
@@ -133,6 +138,7 @@
       font-size: 16px;
       display: flex;
       align-items: center;
+
       &:hover {
         cursor: pointer;
       }
@@ -142,6 +148,7 @@
 
 .itemCard {
   width: 255px;
+
   .thumbnail {
     width: 100%;
     height: 200px;
@@ -183,7 +190,7 @@
     justify-content: space-between;
     margin: 36px 0px 12px;
 
-    > div {
+    >div {
       &:first-child {
         color: #1e1e1e;
         font-size: 36px;

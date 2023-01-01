@@ -5,7 +5,7 @@
 const { encryptedToken } = require('../utils/tools')
 const { axiosCall } = require('../utils/axios')
 const qs = require('qs')
-const ptx = require('../staticVar')
+const { CLIENT_ID, CLIENT_SECRET } = require('../staticVar')
 
 module.exports = async ctx => {
   let access_token = ctx.cookies.get('TOKEN') || ''
@@ -14,12 +14,12 @@ module.exports = async ctx => {
 
   const parameter = {
     grant_type: 'client_credentials',
-    client_id: ptx.CLIENT_ID,
-    client_secret: ptx.CLIENT_SECRET,
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
   }
 
-  // console.log('==============parameter===============')
-  // console.log(JSON.stringify(parameter))
+  console.log('====== CLIENT_ID ======')
+  console.log(CLIENT_ID)
 
   if (!access_token) {
     const options = {
@@ -37,10 +37,8 @@ module.exports = async ctx => {
     try {
       const { status, data } = await axiosCall(options)
 
-      // console.log('====== 取 TOKEN 一次 ======')
-
-      // console.log('====== Response ======')
-      // console.log(JSON.stringify(data))
+      console.log('====== TOKEN Response ======')
+      console.log(JSON.stringify(data))
 
       const { access_token: token = '' } = data
 

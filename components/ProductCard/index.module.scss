@@ -34,7 +34,16 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .city {
     color: $font_gray;
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 6px;
+    }
   }
 }

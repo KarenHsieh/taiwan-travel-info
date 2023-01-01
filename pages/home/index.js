@@ -49,8 +49,7 @@ const Home = () => {
   }
 
   const goSearch = () => {
-    // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
-    window.location.href = `/attractions/?type=${searchType}&keyword=${searchKeyword}`
+    window.location.href = `/attractions?type=${searchType}&keyword=${searchKeyword}`
   }
 
   useMemo(() => {
@@ -192,7 +191,7 @@ const Home = () => {
 }
 
 const ActivityCard = ({ activity }) => {
-  const { ID, Name, City, StartTime, EndTime, Picture = {} } = activity
+  const { ActivityID, ActivityName, City, StartTime, EndTime, Picture = {} } = activity
   const { PictureUrl1 = '', PictureDescription1 = '' } = Picture
 
   const start = formatDate(new Date(StartTime))
@@ -210,13 +209,18 @@ const ActivityCard = ({ activity }) => {
         <div className={styles.date}>
           {start} - {end}
         </div>
-        <div className={styles.name}>{Name}</div>
+        <div className={styles.name}>{ActivityName}</div>
         <div className={styles.location}>
           <div className={styles.city}>
             <FiMapPin />
             {City}
           </div>
-          <div className={styles.moreInfo} onClick={() => {}}>
+          <div
+            className={styles.moreInfo}
+            onClick={() => {
+              window.open(`/introduction?type=activity&ID=${ActivityID}`, '_blank')
+            }}
+          >
             詳細介紹 <FiChevronRight />
           </div>
         </div>
@@ -248,31 +252,3 @@ const ItemCard = props => {
 }
 
 export default Home
-
-// export const getServerSideProps = async ctx => {
-//   const { apiToken = '' } = ctx.query
-
-//   const { data: recentActivityListTop4 = [] } = await axiosCall(
-//     {
-//       method: 'GET',
-//       url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
-//         new Date()
-//       )}&$orderby=StartTime asc&$top=4&$format=JSON`,
-//     },
-//     apiToken
-//   )
-
-//   const { data: recentActivityList = [] } = await axiosCall(
-//     {
-//       method: 'GET',
-//       url: `https://tdx.transportdata.tw/api/basic/v2/Tourism/Activity?$filter=date(StartTime) ge ${formatDate(
-//         new Date()
-//       )}&$orderby=StartTime asc&$format=JSON`,
-//     },
-//     apiToken
-//   )
-
-//   return {
-//     props: { recentActivityListTop4, recentActivityList },
-//   }
-// }

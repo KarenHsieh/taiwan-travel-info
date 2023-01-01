@@ -21,9 +21,7 @@ import styles from './index.module.scss'
 
 const Attractions = () => {
   const dispatch = useDispatch()
-
   const { type, keyword: keywordQuery = '', city: cityQuery = '', apiToken } = useRouter().query
-
   const { resultList, dataCount, isLoading, fetchDataError } = useSelector(state => state.AttractionsReducers)
 
   const pathname = {
@@ -45,22 +43,18 @@ const Attractions = () => {
 
   useEffect(() => {
     dispatch(AttractionsActions.clearList())
-  }, [type])
-
-  useEffect(() => {
-    console.log('apiToken', apiToken)
-    dispatch(AttractionsActions.getList({ type: type, city: cityQuery, keyword: keywordQuery, token: apiToken }))
-  }, [keywordQuery, cityQuery, apiToken])
+    if (cityQuery || keywordQuery) {
+      dispatch(AttractionsActions.getList({ type: type, city: cityQuery, keyword: keywordQuery, token: apiToken }))
+    }
+  }, [type, keywordQuery, cityQuery, apiToken])
 
   return (
     <div>
       <Breadcrumb items={breadcrumb} />
       <SearchBar type={type} keywordQuery={keywordQuery} cityQuery={cityQuery} />
-      {resultList && dataCount ? (
-        <List type={type} />
-      ) : !fetchDataError ? (
-        <CategorySection type={type} />
-      ) : (
+      {resultList && dataCount > 0 && !fetchDataError ? <List key={type} type={type} /> : null}
+
+      {fetchDataError && (
         <div className={styles.errorResult}>
           <div>
             <div>
@@ -73,11 +67,14 @@ const Attractions = () => {
           </div>
         </div>
       )}
+
+      <CategorySection type={type} token={apiToken} />
     </div>
   )
 }
 
-const CategorySection = ({ type }) => {
+const CategorySection = props => {
+  const { type } = props
   return (
     <>
       {type === 'scenicSpot' ? (
@@ -86,13 +83,13 @@ const CategorySection = ({ type }) => {
 
           <div className={styles.topic}>
             <>
-              <TopicCategory pictureUrl={'/images/scenicSpot1.png'} name={'自然風景類'} type={type} />
-              <TopicCategory pictureUrl={'/images/scenicSpot2.png'} name={'觀光工廠類'} type={type} />
-              <TopicCategory pictureUrl={'/images/scenicSpot3.png'} name={'休閒農業類'} type={type} />
-              <TopicCategory pictureUrl={'/images/scenicSpot4.png'} name={'生態類'} type={type} />
-              <TopicCategory pictureUrl={'/images/scenicSpot5.png'} name={'溫泉類'} type={type} />
-              <TopicCategory pictureUrl={'/images/scenicSpot6.png'} name={'自然風景類'} type={type} />
-              <TopicCategory pictureUrl={'/images/scenicSpot7.png'} name={'古蹟類'} type={type} />
+              <TopicCategory pictureUrl={'/images/scenicSpot1.png'} name={'自然風景類'} {...props} />
+              <TopicCategory pictureUrl={'/images/scenicSpot2.png'} name={'觀光工廠類'} {...props} />
+              <TopicCategory pictureUrl={'/images/scenicSpot3.png'} name={'休閒農業類'} {...props} />
+              <TopicCategory pictureUrl={'/images/scenicSpot4.png'} name={'生態類'} {...props} />
+              <TopicCategory pictureUrl={'/images/scenicSpot5.png'} name={'溫泉類'} {...props} />
+              <TopicCategory pictureUrl={'/images/scenicSpot6.png'} name={'自然風景類'} {...props} />
+              <TopicCategory pictureUrl={'/images/scenicSpot7.png'} name={'古蹟類'} {...props} />
             </>
           </div>
         </>
@@ -102,12 +99,12 @@ const CategorySection = ({ type }) => {
         <>
           <h3 className={styles.category}>熱門分類</h3>
           <div className={styles.topic}>
-            <TopicCategory pictureUrl={'/images/activity1.png'} name={'節慶活動'} type={type} />
-            <TopicCategory pictureUrl={'/images/activity2.png'} name={'自行車活動'} type={type} />
-            <TopicCategory pictureUrl={'/images/activity3.png'} name={'遊憩活動'} type={type} />
-            <TopicCategory pictureUrl={'/images/activity4.png'} name={'產業文化活動'} type={type} />
-            <TopicCategory pictureUrl={'/images/activity5.png'} name={'年度活動'} type={type} />
-            <TopicCategory pictureUrl={'/images/activity6.png'} name={'四季活動'} type={type} />
+            <TopicCategory pictureUrl={'/images/activity1.png'} name={'節慶活動'} {...props} />
+            <TopicCategory pictureUrl={'/images/activity2.png'} name={'自行車活動'} {...props} />
+            <TopicCategory pictureUrl={'/images/activity3.png'} name={'遊憩活動'} {...props} />
+            <TopicCategory pictureUrl={'/images/activity4.png'} name={'產業文化活動'} {...props} />
+            <TopicCategory pictureUrl={'/images/activity5.png'} name={'年度活動'} {...props} />
+            <TopicCategory pictureUrl={'/images/activity6.png'} name={'四季活動'} {...props} />
           </div>
         </>
       ) : null}
@@ -115,12 +112,12 @@ const CategorySection = ({ type }) => {
         <>
           <h3 className={styles.category}>熱門分類</h3>
           <div className={styles.topic}>
-            <TopicCategory pictureUrl={'/images/food1.png'} name={'地方特產'} type={type} />
-            <TopicCategory pictureUrl={'/images/food2.png'} name={'中式美食'} type={type} />
-            <TopicCategory pictureUrl={'/images/food3.png'} name={'甜點冰品'} type={type} />
-            <TopicCategory pictureUrl={'/images/food4.png'} name={'異國料理'} type={type} />
-            <TopicCategory pictureUrl={'/images/food5.png'} name={'伴手禮'} type={type} />
-            <TopicCategory pictureUrl={'/images/food6.png'} name={'素食'} type={type} />
+            <TopicCategory pictureUrl={'/images/food1.png'} name={'地方特產'} {...props} />
+            <TopicCategory pictureUrl={'/images/food2.png'} name={'中式美食'} {...props} />
+            <TopicCategory pictureUrl={'/images/food3.png'} name={'甜點冰品'} {...props} />
+            <TopicCategory pictureUrl={'/images/food4.png'} name={'異國料理'} {...props} />
+            <TopicCategory pictureUrl={'/images/food5.png'} name={'伴手禮'} {...props} />
+            <TopicCategory pictureUrl={'/images/food6.png'} name={'素食'} {...props} />
           </div>
         </>
       ) : null}
@@ -172,8 +169,6 @@ const SearchBar = ({ type, keywordQuery, cityQuery }) => {
   let queryString = ''
 
   const getList = () => {
-    // dispatch(AttractionsActions.getList({ type: type, city: searchCityCode, keyword: searchKeyword }))
-
     queryString += `?type=${type}&${searchCityCode ? `city=${searchCityCode}` : ''}${
       searchKeyword ? `&keyword=${searchKeyword}` : ''
     }`
@@ -227,10 +222,10 @@ const SearchBar = ({ type, keywordQuery, cityQuery }) => {
   )
 }
 
-const TopicCategory = ({ pictureUrl, name, type }) => {
+const TopicCategory = ({ pictureUrl, name, type, token }) => {
   const dispatch = useDispatch()
   const getList = () => {
-    dispatch(AttractionsActions.getList({ type: type, city: '', keyword: '', class: name }))
+    dispatch(AttractionsActions.getList({ type: type, city: '', keyword: '', class: name, token: token }))
   }
 
   return (
@@ -285,30 +280,34 @@ function PaginateItems({ currentItems = [], type = '' }) {
   if (currentItems?.length) {
     list = currentItems.map(item => {
       let key = ''
+      let title = ''
 
       switch (type) {
         case 'scenicSpot': {
-          const { ScenicSpotID } = item
+          const { ScenicSpotID, ScenicSpotName } = item
           key = ScenicSpotID
+          title = ScenicSpotName
           break
         }
 
         case 'restaurant': {
-          const { RestaurantID } = item
+          const { RestaurantID, RestaurantName } = item
           key = RestaurantID
+          title = RestaurantName
           break
         }
 
         case 'activity': {
-          const { ActivityID } = item
+          const { ActivityID, ActivityName } = item
           key = ActivityID
+          title = ActivityName
           break
         }
         default: {
           break
         }
       }
-      return <ProductCard key={key} id={key} item={item} type={type} />
+      return <ProductCard key={key} id={key} title={title} item={item} type={type} />
     })
   } else {
     return null

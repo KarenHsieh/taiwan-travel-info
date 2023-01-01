@@ -26,4 +26,3 @@ yarn-error.log*
 /.next/
 /build
 package-lock.json
-
