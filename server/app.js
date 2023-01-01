@@ -49,6 +49,12 @@ app.prepare().then(() => {
     next()
   })
 
+  router.post('/', async (ctx, next) => {
+    ctx.redirect('/home')
+    ctx.status = 302
+    return false
+  })
+
   router.get(
     '/home',
     async (ctx, next) => {
