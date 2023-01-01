@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 
@@ -21,7 +21,7 @@ import styles from './index.module.scss'
 
 const Attractions = () => {
   const dispatch = useDispatch()
-  const { type, keyword: keywordQuery = '', city: cityQuery = '', apiToken } = useRouter().query
+  const { type, keyword: keywordQuery = '', city: cityQuery = '', class: classQuery = '', apiToken } = useRouter().query
   const { resultList, dataCount, isLoading, fetchDataError } = useSelector(state => state.AttractionsReducers)
 
   const pathname = {
@@ -41,11 +41,19 @@ const Attractions = () => {
     },
   ]
 
-  useEffect(() => {
+  useMemo(() => {
     dispatch(AttractionsActions.clearList())
-    if (cityQuery || keywordQuery) {
-      dispatch(AttractionsActions.getList({ type: type, city: cityQuery, keyword: keywordQuery, token: apiToken }))
-    }
+    // if (cityQuery || keywordQuery) {
+    dispatch(
+      AttractionsActions.getList({
+        type: type,
+        city: cityQuery,
+        keyword: keywordQuery,
+        category: classQuery,
+        token: apiToken,
+      })
+    )
+    // }
   }, [type, keywordQuery, cityQuery, apiToken])
 
   return (
@@ -68,7 +76,7 @@ const Attractions = () => {
         </div>
       )}
 
-      <CategorySection type={type} token={apiToken} />
+      <CategorySection type={type} city={cityQuery} keyword={keywordQuery} token={apiToken} />
     </div>
   )
 }
@@ -222,10 +230,11 @@ const SearchBar = ({ type, keywordQuery, cityQuery }) => {
   )
 }
 
-const TopicCategory = ({ pictureUrl, name, type, token }) => {
+const TopicCategory = ({ pictureUrl, name, type, city, keyword }) => {
   const dispatch = useDispatch()
   const getList = () => {
-    dispatch(AttractionsActions.getList({ type: type, city: '', keyword: '', class: name, token: token }))
+    window.location.href = `/attractions?type=${type}&city=${city}&keyword=${keyword}&class=${name}`
+    // dispatch(AttractionsActions.getList({ type: type, city: '', keyword: '', category: name, token: token }))
   }
 
   return (

@@ -42,8 +42,8 @@ export function* getList({ payload }) {
           uri.restaurant +
           (city ? '/' + city : '') +
           '?$filter=not(Class eq null) AND not(Picture eq null) AND not(City eq null)' +
-          (keyword && " AND contains(Name, '" + keyword + "')") +
-          (category && " AND Class eq '" + category + "'") +
+          (keyword ? " AND contains(Name, '" + keyword + "')" : '') +
+          (category ? " AND Class eq '" + category + "'" : '') +
           '&$orderby=RestaurantID asc&$format=JSON&$top=200',
       }
 
@@ -57,18 +57,15 @@ export function* getList({ payload }) {
           (city ? '/' + city : '') +
           '?$filter=date(StartTime) ge ' +
           formatDate(new Date()) +
-          (keyword && " AND contains(Name, '" + keyword + "')") +
-          (category && " AND Class1 eq '" + category + "'") +
+          (keyword ? " AND contains(Name, '" + keyword + "')" : '') +
+          (category ? " AND Class1 eq '" + category + "'" : '') +
           '&$orderby=StartTime asc&$format=JSON&$top=200',
       }
 
       break
     }
     default: {
-      options = {
-        method: 'GET',
-        url: `${uri.scenicSpot}${city ? `/${city}/` : ''}`,
-      }
+      options = {}
     }
   }
 

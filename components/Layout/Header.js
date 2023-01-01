@@ -15,34 +15,13 @@ const Header = () => {
       </div>
       <div className={styles.otherPage}>
         <div>
-          <Link
-            href={{
-              pathname: '/attractions',
-              query: { type: 'scenicSpot' },
-            }}
-          >
-            探索景點
-          </Link>
+          <a href="/attractions?type=scenicSpot">探索景點</a>
         </div>
         <div>
-          <Link
-            href={{
-              pathname: '/attractions',
-              query: { type: 'activity' },
-            }}
-          >
-            節慶活動
-          </Link>
+          <a href="/attractions?type=activity">節慶活動</a>
         </div>
         <div>
-          <Link
-            href={{
-              pathname: '/attractions',
-              query: { type: 'restaurant' },
-            }}
-          >
-            品嚐美食
-          </Link>
+          <a href="/attractions?type=restaurant">品嚐美食</a>
         </div>
       </div>
     </div>
