@@ -22,7 +22,15 @@ import styles from './index.module.scss'
 const Attractions = () => {
   const dispatch = useDispatch()
   const { type, keyword: keywordQuery = '', city: cityQuery = '', class: classQuery = '', apiToken } = useRouter().query
-  const { resultList, dataCount, isLoading, fetchDataError } = useSelector(state => state.AttractionsReducers)
+  const { resultList, dataCount, isLoading, fetchDataError, serviceError } = useSelector(
+    state => state.AttractionsReducers
+  )
+
+  useEffect(() => {
+    if (serviceError) {
+      window.location.href = '/500'
+    }
+  }, [serviceError])
 
   const pathname = {
     scenicSpot: '探索景點',

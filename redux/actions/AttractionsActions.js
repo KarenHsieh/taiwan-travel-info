@@ -21,9 +21,6 @@ export const getListSuccess = (results, dataCount) => ({
 
 export const getListError = results => ({
   type: actionTypes.GET_LIST_ERROR,
-  // payload: {
-  //   results,
-  // },
 })
 
 export const clearList = () => ({
@@ -52,4 +49,8 @@ export const getRecentActivityList = token => {
 export const getRecentActivityListSuccess = results => ({
   type: actionTypes.GET_RECENT_ACTIVITY_LIST_SUCCESS,
   payload: results,
+})
+
+export const serviceError = () => ({
+  type: actionTypes.SERVICE_ERROR,
 })

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Component
 import Carousel from '../../components/Carousel'
@@ -8,6 +9,8 @@ import Breadcrumb from '../../components/Breadcrumb'
 
 import { formatDate } from '../../server/utils/tools'
 import { axiosCall } from '../../server/utils/axios'
+
+import * as AttractionsActions from '../../redux/actions/AttractionsActions'
 
 // Styles And Icons
 import styles from './index.module.scss'
@@ -19,11 +22,21 @@ const pathname = {
 }
 
 const Introduction = () => {
+  const dispatch = useDispatch()
+
+  const { serviceError } = useSelector(state => state.AttractionsReducers)
+
   const { type, apiToken, ID: productSeq } = useRouter().query
 
   const [introduction, setIntroduction] = useState({})
   const [detailTitle, setDetailTitle] = useState('')
   const [productName, setProductName] = useState('')
+
+  useEffect(() => {
+    if (serviceError) {
+      window.location.href = '/500'
+    }
+  }, [serviceError])
 
   useEffect(() => {
     let title = ''
@@ -91,13 +104,17 @@ const Introduction = () => {
   }, [type, apiToken])
 
   const getData = async url => {
-    const { data: introduction } = await axiosCall(
+    const { status, data: introduction } = await axiosCall(
       {
         method: 'GET',
         url: url,
       },
       apiToken
     )
+
+    if (status === 429) {
+      dispatch(AttractionsActions.serviceError())
+    }
 
     console.log('getData introduction', JSON.stringify(introduction))
 

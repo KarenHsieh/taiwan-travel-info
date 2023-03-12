@@ -7,6 +7,7 @@ const initState = {
   fetchDataError: false,
   top4Activity: [],
   allActivity: [],
+  serviceError: false,
 }
 
 function AttractionsReducers(state = initState, action) {
@@ -26,6 +27,7 @@ function AttractionsReducers(state = initState, action) {
         dataCount: action.payload.dataCount,
         isLoading: false,
         fetchDataError: false,
+        serviceError: false,
       }
     }
 
@@ -49,6 +51,7 @@ function AttractionsReducers(state = initState, action) {
       return {
         ...state,
         top4Activity: action.payload,
+        serviceError: false,
       }
     }
 
@@ -56,6 +59,13 @@ function AttractionsReducers(state = initState, action) {
       return {
         ...state,
         allActivity: action.payload,
+      }
+    }
+
+    case actionTypes.SERVICE_ERROR: {
+      return {
+        ...state,
+        serviceError: true,
       }
     }
 

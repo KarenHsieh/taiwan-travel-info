@@ -17,13 +17,18 @@ import styles from './index.module.scss'
 const Home = () => {
   const dispatch = useDispatch()
   const { apiToken } = useRouter().query
-  // let apiToken = ''
 
-  const { top4Activity: recentActivityListTop4 } = useSelector(state => state.AttractionsReducers)
+  const { top4Activity: recentActivityListTop4, serviceError } = useSelector(state => state.AttractionsReducers)
 
   const [searchType, setSearchType] = useState('')
   const [searchKeyword, setSearchKeyword] = useState('')
   const [recentActivityList, setRecentActivityList] = useState('')
+
+  useEffect(() => {
+    if (serviceError) {
+      window.location.href = '/500'
+    }
+  }, [serviceError])
 
   useEffect(() => {
     dispatch(AttractionsActions.getRecentActivityListTop4(apiToken))

@@ -2,8 +2,6 @@ import { call, put } from 'redux-saga/effects'
 
 import * as AttractionsActions from '../actions/AttractionsActions'
 
-// import axios from 'axios'
-
 import { formatDate } from '../../server/utils/tools'
 import { axiosCall } from '../../server/utils/axios'
 
@@ -77,9 +75,12 @@ export function* getList({ payload }) {
     options = {}
 
     const { status, data = [] } = response
-    // if (status === 429) {
-    //   // 跳出 API 請求上限提示
-    // }
+
+    if (status === 429) {
+      // 跳出 API 請求上限提示
+      yield put(AttractionsActions.serviceError())
+    }
+
     if (status === 200 && data && data.length) {
       yield put(AttractionsActions.getListSuccess(data, data.length))
     } else {
@@ -105,7 +106,12 @@ export function* getRecentActivityListTop4({ payload }) {
       return await axiosCall(options, token)
     })
 
-    const { data = [] } = response
+    const { status, data = [] } = response
+
+    if (status === 429) {
+      // 跳出 API 請求上限提示
+      yield put(AttractionsActions.serviceError())
+    }
 
     yield put(AttractionsActions.getRecentActivityListTop4Success(data))
   } catch (error) {
@@ -128,7 +134,12 @@ export function* getRecentActivityList({ payload }) {
       return await axiosCall(options, token)
     })
 
-    const { data = [] } = response
+    const { status, data = [] } = response
+
+    if (status === 429) {
+      // 跳出 API 請求上限提示
+      yield put(AttractionsActions.serviceError())
+    }
 
     yield put(AttractionsActions.getRecentActivityListSuccess(data))
   } catch (error) {
