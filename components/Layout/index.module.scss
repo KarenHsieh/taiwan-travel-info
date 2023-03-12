@@ -5,7 +5,8 @@ $footerHeight: 60px;
 
 .document {
   width: 100%;
-  min-width: 1280px;
+  min-width: 1100px;
+  margin: 0 auto;
 
   .header,
   .footer {
@@ -14,12 +15,12 @@ $footerHeight: 60px;
   }
 
   .container {
-    min-width: 1280px;
-    width: 100%;
+    clear: both;
+    width: 1100px;
     box-sizing: border-box;
     min-height: calc(100vh - #{$headerHeight} - #{$footerHeight});
-    margin: auto;
-    padding: 60px 45px;
+    margin: 0 auto;
+    padding: 60px 0px;
   }
 }
 

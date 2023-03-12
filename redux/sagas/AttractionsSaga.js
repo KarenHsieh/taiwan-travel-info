@@ -71,14 +71,11 @@ export function* getList({ payload }) {
 
   try {
     const response = yield call(async () => {
-      console.log('[debug] options.url')
-      console.log(options.url)
       return await axiosCall(options, token)
     })
 
     options = {}
-    console.log('[debug] response ==========')
-    console.log(response)
+
     const { status, data = [] } = response
     // if (status === 429) {
     //   // 跳出 API 請求上限提示
@@ -94,7 +91,6 @@ export function* getList({ payload }) {
 }
 
 export function* getRecentActivityListTop4({ payload }) {
-  console.log('===> getRecentActivityListTop4 payload', payload)
   const token = payload
   const options = {
     method: 'GET',
@@ -109,9 +105,7 @@ export function* getRecentActivityListTop4({ payload }) {
       return await axiosCall(options, token)
     })
 
-    console.log('========== [debug] response ==========')
-    console.log(response)
-    const { status, data = [] } = response
+    const { data = [] } = response
 
     yield put(AttractionsActions.getRecentActivityListTop4Success(data))
   } catch (error) {
@@ -134,9 +128,7 @@ export function* getRecentActivityList({ payload }) {
       return await axiosCall(options, token)
     })
 
-    console.log('========== [debug] response ==========')
-    console.log(response)
-    const { status, data = [] } = response
+    const { data = [] } = response
 
     yield put(AttractionsActions.getRecentActivityListSuccess(data))
   } catch (error) {

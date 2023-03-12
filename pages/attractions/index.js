@@ -162,8 +162,6 @@ const SearchBar = ({ type, keywordQuery, cityQuery }) => {
   }
 
   const setCity = ({ label, value }) => {
-    console.log(label)
-    console.log(value)
     setSearchCityCode(value)
     setSearchCityName(label)
   }

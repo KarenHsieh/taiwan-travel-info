@@ -7,7 +7,6 @@ import Carousel from '../../components/Carousel'
 import Select from 'react-select'
 
 import { formatDate } from '../../server/utils/tools'
-import { axiosCall } from '../../server/utils/axios'
 import { FiMapPin, FiChevronRight } from 'react-icons/fi'
 
 import * as AttractionsActions from '../../redux/actions/AttractionsActions'
@@ -16,7 +15,6 @@ import * as AttractionsActions from '../../redux/actions/AttractionsActions'
 import styles from './index.module.scss'
 
 const Home = () => {
-  // console.log('useRouter.query', useRouter().query)
   const dispatch = useDispatch()
   const { apiToken } = useRouter().query
   // let apiToken = ''
@@ -29,7 +27,6 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(AttractionsActions.getRecentActivityListTop4(apiToken))
-    // dispatch(AttractionsActions.getRecentActivityList(apiToken))
   }, [])
 
   const options = [
@@ -119,7 +116,7 @@ const Home = () => {
             name={'九份老街'}
             city={'新北市'}
             type={'scenicSpot'}
-            itemId={'C1_379000000A_000298'}
+            itemId={'C1_382000000A_109990'}
           />
           <ItemCard
             pictureUrl={'/home/ScenicSpotPicture-1.png'}
@@ -137,10 +134,10 @@ const Home = () => {
           />
           <ItemCard
             pictureUrl={'/home/ScenicSpotPicture-3.png'}
-            name={'龜山島牛奶海'}
-            city={'宜蘭縣'}
+            name={'田寮月世界'}
+            city={'高雄市'}
             type={'scenicSpot'}
-            itemId={'C1_315081800H_010073'}
+            itemId={'C1_397000000A_000230'}
           />
         </div>
       </div>

@@ -40,30 +40,12 @@ axios.interceptors.response.use(
 exports.axiosCall = (options, token = '') => {
   const method = options.method.toLocaleLowerCase()
 
-  console.log('===> axiosCall token : ' + token)
+  // console.log('===> axiosCall token : ' + token)
   // let headers = ''
   if (token) {
     // headers = { 'authorization': 'Bearer ' + decryptedToken(token) }
     options.headers = { 'authorization': 'Bearer ' + token }
   }
-
-  console.log('=====> axiosCall')
-  console.log('headers => ' + JSON.stringify(options.headers))
-  console.log({
-    method: 'POST',
-    url: options.url,
-    timeout: 30 * 1000,
-    data: options.data || {},
-    maxContentLength: options.maxContentLength || 10 * 1024 * 1024,
-    maxBodyLength: options.maxBodyLength || 10 * 1024 * 1024,
-    // headers: getAuthorizationHeader(), // old ptx api header
-    headers: options.headers || {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    responseType: options.responseType || 'json',
-    withCredentials: options.withCredentials || false,
-  })
 
   switch (method) {
     case 'post':

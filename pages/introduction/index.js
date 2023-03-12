@@ -85,7 +85,6 @@ const Introduction = () => {
         // url = `${url}?$filter=ID eq '${productSeq}'&$format=JSON`
       }
     }
-    console.log('url', url)
 
     getData(url)
     // }
@@ -104,27 +103,6 @@ const Introduction = () => {
 
     setIntroduction(introduction[0])
   }
-
-  /*  const {
-    ScenicSpotID: ID,
-    ScenicSpotName: Name,
-    Description = '',
-    DescriptionDetail = '',
-    Picture = {},
-    Class1 = '',
-    Class2 = '',
-    Class3 = '',
-    Phone = '',
-    Address = '',
-    Position = '',
-    Organizer = '',
-    WebsiteUrl = '',
-    Remarks = '',
-    OpenTime = '',
-    StartTime = '',
-    EndTime = '',
-    ParkingPosition = '',
-  } = introduction */
 
   const { PictureUrl1 = '', PictureDescription1 = '' } = introduction?.Picture || {}
   const { PositionLon = '', PositionLat = '' } = introduction?.Position || {}

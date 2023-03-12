@@ -19,7 +19,7 @@ exports.encryptedToken = token => {
 
   // Encrypt the API token
   var encrypted = CryptoJS.AES.encrypt(token, ptx.ENCODE_KEY)
-  console.log(token + ' => encrypted = ' + encrypted)
+  // console.log(token + ' => encrypted = ' + encrypted)
 
   return encrypted
 }
@@ -27,7 +27,7 @@ exports.encryptedToken = token => {
 exports.decryptedToken = token => {
   // 解密
   var decrypted = CryptoJS.AES.decrypt(token, ptx.ENCODE_KEY)
-  console.log(token + ' => decrypted = ' + decrypted)
+  // console.log(token + ' => decrypted = ' + decrypted)
 
   return decrypted
 }

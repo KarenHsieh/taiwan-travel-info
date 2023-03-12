@@ -18,9 +18,6 @@ module.exports = async ctx => {
     client_secret: CLIENT_SECRET,
   }
 
-  console.log('====== CLIENT_ID ======')
-  console.log(CLIENT_ID)
-
   if (!access_token) {
     const options = {
       method: 'POST',
@@ -31,14 +28,11 @@ module.exports = async ctx => {
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
     }
 
-    // console.log('====== options ======')
-    // console.log(JSON.stringify(options))
-
     try {
-      const { status, data } = await axiosCall(options)
+      const { data } = await axiosCall(options)
 
-      console.log('====== TOKEN Response ======')
-      console.log(JSON.stringify(data))
+      // console.log('====== TOKEN Response ======')
+      // console.log(JSON.stringify(data))
 
       const { access_token: token = '' } = data
 

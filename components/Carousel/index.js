@@ -57,7 +57,7 @@ const Carousel = () => {
         <div
           className={styles.item}
           onClick={() => {
-            window.open('/introduction?type=scenicSpot&ID=C1_379000000A_000126', '_blank')
+            window.open('/introduction?type=scenicSpot&ID=C1_382000000A_109735', '_blank')
           }}
         >
           <div className={styles.title}>新北市 ｜ 野柳地質公園</div>
